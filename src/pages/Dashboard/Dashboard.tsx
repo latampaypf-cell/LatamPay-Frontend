@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeftRight,
@@ -8,6 +9,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { TransferModal } from "../../components/transfer/TransferModal";
 
 const currencies = [
   {
@@ -42,27 +44,35 @@ const transactions = [
   },
 ];
 
-const quickActions = [
-  {
-    icon: Send,
-    label: "Enviar",
-  },
-  {
-    icon: ArrowDownToLine,
-    label: "Recibir",
-  },
-  {
-    icon: ArrowLeftRight,
-    label: "Convertir",
-  },
-  {
-    icon: History,
-    label: "Historial",
-  },
-];
+type QuickAction = {
+  icon: typeof Send;
+  label: string;
+  onClick?: () => void;
+};
 
 export const Dashboard = () => {
   const { user } = useAuth();
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
+
+  const quickActions: QuickAction[] = [
+    {
+      icon: Send,
+      label: "Enviar",
+      onClick: () => setIsTransferOpen(true),
+    },
+    {
+      icon: ArrowDownToLine,
+      label: "Recibir",
+    },
+    {
+      icon: ArrowLeftRight,
+      label: "Convertir",
+    },
+    {
+      icon: History,
+      label: "Historial",
+    },
+  ];
 
   return (
     <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-slate-950 px-6 py-12 text-white">
@@ -157,7 +167,10 @@ export const Dashboard = () => {
               return (
                 <button
                   key={action.label}
-                  className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+                  type="button"
+                  onClick={action.onClick}
+                  disabled={!action.onClick}
+                  className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Icon
                     size={18}
@@ -229,6 +242,11 @@ export const Dashboard = () => {
           </div>
         </motion.section>
       </div>
+
+      <TransferModal
+        open={isTransferOpen}
+        onClose={() => setIsTransferOpen(false)}
+      />
     </section>
   );
 };

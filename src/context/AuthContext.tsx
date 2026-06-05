@@ -28,6 +28,7 @@ export type AuthContextValue = {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  verifyPassword: (password: string) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -67,6 +68,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     dispatch(logoutAction());
   }, []);
 
+  const verifyPassword = useCallback(
+    async (password: string): Promise<boolean> => {
+      if (!state.user?.email) return false;
+      try {
+        await apiLogin(state.user.email, password);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [state.user?.email],
+  );
+
   const value = useMemo<AuthContextValue>(
     () => ({
       token: state.token,
@@ -75,8 +89,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isLoading: state.isLoading,
       login,
       logout,
+      verifyPassword,
     }),
-    [state, login, logout],
+    [state, login, logout, verifyPassword],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
