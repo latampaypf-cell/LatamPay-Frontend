@@ -13,6 +13,9 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { TransferModal } from "../../components/transfer/TransferModal";
 import { DashboardSkeleton } from "../../components/dashboard/DashboardSkeleton";
+import { CurrencyCard } from "../../components/dashboard/CurrencyCard";
+import { TransactionRow } from "../../components/dashboard/TransactionRow";
+import { Card } from "../../components/ui/Card";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { ErrorState } from "../../components/ui/ErrorState";
 import { useDashboardData } from "../../hooks/useDashboardData";
@@ -29,23 +32,10 @@ export const Dashboard = () => {
   const { data, isLoading, isError, refetch } = useDashboardData();
 
   const quickActions: QuickAction[] = [
-    {
-      icon: Send,
-      label: "Enviar",
-      onClick: () => setIsTransferOpen(true),
-    },
-    {
-      icon: ArrowDownToLine,
-      label: "Recibir",
-    },
-    {
-      icon: ArrowLeftRight,
-      label: "Convertir",
-    },
-    {
-      icon: History,
-      label: "Historial",
-    },
+    { icon: Send, label: "Enviar", onClick: () => setIsTransferOpen(true) },
+    { icon: ArrowDownToLine, label: "Recibir" },
+    { icon: ArrowLeftRight, label: "Convertir" },
+    { icon: History, label: "Historial" },
   ];
 
   if (isLoading) return <DashboardSkeleton />;
@@ -104,42 +94,35 @@ export const Dashboard = () => {
             </span>
           </h1>
 
-          <p className="mt-2 text-slate-400">
-            {user?.email}
-          </p>
+          <p className="mt-2 text-slate-400">{user?.email}</p>
         </motion.div>
 
         {/* Balance */}
-        <motion.article
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mt-8 rounded-3xl border border-cyan-500/20 bg-white/5 p-8 backdrop-blur-xl shadow-[0_0_50px_rgba(6,182,212,0.15)]"
+          className="mt-8"
         >
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-slate-400">
-                Balance Total
-              </p>
+          <Card as="article" tone="highlight" padding="lg" radius="xl">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-slate-400">Balance Total</p>
 
-              <h2 className="mt-2 text-5xl font-bold">
-                {totalBalance}
-              </h2>
+                <h2 className="mt-2 text-5xl font-bold">{totalBalance}</h2>
 
-              <div className="mt-3 flex items-center gap-2 text-emerald-400">
-                <TrendingUp size={18} />
-                <span>{trend}</span>
+                <div className="mt-3 flex items-center gap-2 text-emerald-400">
+                  <TrendingUp size={18} />
+                  <span>{trend}</span>
+                </div>
+              </div>
+
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-cyan-500/10">
+                <Wallet size={38} className="text-cyan-400" />
               </div>
             </div>
-
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-cyan-500/10">
-              <Wallet
-                size={38}
-                className="text-cyan-400"
-              />
-            </div>
-          </div>
-        </motion.article>
+          </Card>
+        </motion.div>
 
         {/* Acciones rápidas */}
         <motion.section
@@ -148,9 +131,7 @@ export const Dashboard = () => {
           transition={{ delay: 0.25 }}
           className="mt-8"
         >
-          <h2 className="mb-4 text-xl font-semibold">
-            Acciones rápidas
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold">Acciones rápidas</h2>
 
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {quickActions.map((action) => {
@@ -164,11 +145,7 @@ export const Dashboard = () => {
                   disabled={!action.onClick}
                   className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <Icon
-                    size={18}
-                    className="text-cyan-400"
-                  />
-
+                  <Icon size={18} className="text-cyan-400" />
                   <span>{action.label}</span>
                 </button>
               );
@@ -183,9 +160,7 @@ export const Dashboard = () => {
           transition={{ delay: 0.35 }}
           className="mt-10"
         >
-          <h2 className="mb-4 text-xl font-semibold">
-            Mis monedas
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold">Mis monedas</h2>
 
           {currencies.length === 0 ? (
             <EmptyState
@@ -196,20 +171,12 @@ export const Dashboard = () => {
           ) : (
             <div className="grid gap-4 md:grid-cols-3">
               {currencies.map((item) => (
-                <div
+                <CurrencyCard
                   key={item.currency}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
-                >
-                  <p className="text-slate-400">
-                    {item.currency}
-                  </p>
-
-                  <p
-                    className={`mt-2 text-3xl font-bold ${item.color}`}
-                  >
-                    {item.value}
-                  </p>
-                </div>
+                  currency={item.currency}
+                  value={item.value}
+                  valueClassName={item.color}
+                />
               ))}
             </div>
           )}
@@ -222,9 +189,7 @@ export const Dashboard = () => {
           transition={{ delay: 0.45 }}
           className="mt-10"
         >
-          <h2 className="mb-4 text-xl font-semibold">
-            Últimos movimientos
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold">Últimos movimientos</h2>
 
           {transactions.length === 0 ? (
             <EmptyState
@@ -235,16 +200,11 @@ export const Dashboard = () => {
           ) : (
             <div className="space-y-4">
               {transactions.map((tx) => (
-                <div
+                <TransactionRow
                   key={`${tx.title}-${tx.amount}`}
-                  className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl"
-                >
-                  <span>{tx.title}</span>
-
-                  <span className="font-semibold text-cyan-400">
-                    {tx.amount}
-                  </span>
-                </div>
+                  title={tx.title}
+                  amount={tx.amount}
+                />
               ))}
             </div>
           )}

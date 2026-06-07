@@ -100,13 +100,9 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
           reason={state.reason}
           userEmail={user?.email}
           password={state.password}
-          showPassword={state.showPassword}
           isVerifying={state.isVerifying}
           onPasswordChange={(value) =>
             dispatch({ type: "SET_PASSWORD", payload: value })
-          }
-          onToggleShowPassword={() =>
-            dispatch({ type: "TOGGLE_PASSWORD_VISIBILITY" })
           }
           onBack={() => dispatch({ type: "BACK_TO_FORM" })}
           onConfirm={onConfirmSubmit}
