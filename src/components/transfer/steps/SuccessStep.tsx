@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import { Button } from "../../button/Button";
 import { formatAmount } from "../../../services/transfer/format";
 
 export type SuccessStepProps = {
@@ -24,13 +25,9 @@ export const SuccessStep = ({
       </span>{" "}
       a <span className="font-semibold">{destination}</span>.
     </p>
-    <button
-      type="button"
-      onClick={onClose}
-      className="mt-6 w-full rounded-xl bg-cyan-500 py-3 font-semibold text-slate-950 transition hover:scale-[1.02]"
-    >
+    <Button onClick={onClose} fullWidth className="mt-6">
       Listo
-    </button>
+    </Button>
   </div>
 );
 
