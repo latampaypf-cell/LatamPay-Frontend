@@ -1,5 +1,8 @@
 import type { FormEvent } from "react";
-import { AlertTriangle, Eye, EyeOff, Lock } from "lucide-react";
+import { AlertTriangle, Lock } from "lucide-react";
+import { Input } from "../../input/Input";
+import { Button } from "../../button/Button";
+import { Card } from "../../ui/Card";
 import { formatAmount } from "../../../services/transfer/format";
 import {
   transferReasons,
@@ -12,11 +15,8 @@ export type ConfirmStepProps = {
   reason: TransferReason;
   userEmail?: string;
   password: string;
-  showPassword: boolean;
   isVerifying: boolean;
-  error: string | null;
   onPasswordChange: (value: string) => void;
-  onToggleShowPassword: () => void;
   onBack: () => void;
   onConfirm: (e: FormEvent<HTMLFormElement>) => void;
 };
@@ -27,11 +27,8 @@ export const ConfirmStep = ({
   reason,
   userEmail,
   password,
-  showPassword,
   isVerifying,
-  error,
   onPasswordChange,
-  onToggleShowPassword,
   onBack,
   onConfirm,
 }: ConfirmStepProps) => {
@@ -54,7 +51,7 @@ export const ConfirmStep = ({
         </div>
       </header>
 
-      <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+      <Card padding="sm" className="mt-5">
         <p className="text-xs text-slate-400">Monto</p>
         <p className="mt-0.5 text-3xl font-bold text-cyan-400">
           ${formatAmount(amount)}
@@ -76,54 +73,37 @@ export const ConfirmStep = ({
             <span className="break-all text-right">{userEmail ?? "—"}</span>
           </div>
         </div>
-      </div>
+      </Card>
 
       <form onSubmit={onConfirm} className="mt-5">
-        <label className="mb-1.5 block text-sm text-slate-300">
-          Contraseña
-        </label>
-        <div className="relative">
-          <Lock
-            size={18}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-          />
-          <input
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => onPasswordChange(e.target.value)}
-            placeholder="••••••••"
-            autoFocus
-            className="w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 pl-10 pr-12 text-white outline-none transition focus:border-cyan-500/40"
-          />
-          <button
-            type="button"
-            onClick={onToggleShowPassword}
-            aria-label={
-              showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-            }
-            className="absolute inset-y-0 right-3 flex items-center text-slate-400 transition hover:text-cyan-400"
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        </div>
-
-        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+        <Input
+          label="Contraseña"
+          type="password"
+          value={password}
+          onChange={(e) => onPasswordChange(e.target.value)}
+          placeholder="••••••••"
+          autoFocus
+          leftIcon={Lock}
+          togglePassword
+        />
 
         <div className="mt-6 grid grid-cols-2 gap-3">
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={onBack}
-            className="rounded-xl border border-white/10 bg-white/5 py-3 font-medium text-slate-200 transition hover:bg-white/10"
+            fullWidth
           >
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            disabled={isVerifying}
-            className="rounded-xl bg-cyan-500 py-3 font-semibold text-slate-950 transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+            isLoading={isVerifying}
+            loadingText="Verificando..."
+            fullWidth
           >
-            {isVerifying ? "Verificando..." : "Confirmar"}
-          </button>
+            Confirmar
+          </Button>
         </div>
       </form>
     </>

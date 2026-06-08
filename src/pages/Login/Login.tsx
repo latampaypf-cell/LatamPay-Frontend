@@ -16,9 +16,9 @@ type LoginFormData = {
 };
 
 const quotes = [
-  { pair: "USD / ARS", value: "$1.250" },
-  { pair: "BRL / ARS", value: "$220" },
-  { pair: "USD / BRL", value: "R$5.60" },
+  { pair: "ARS / COP", value: "$3,08" },
+  { pair: "VES / ARS", value: "$26,00" },
+  { pair: "VES / COP", value: "$80,00" },
 ];
 
 export const Login = () => {
