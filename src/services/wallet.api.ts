@@ -77,23 +77,13 @@ export const apiTransfer = (
   );
 
 
-export const apiGetHistory = (
-  page = 1,
-  limit = 50
-): Promise<ApiHistory> =>
-  authedFetch<ApiHistory>(
-    `/api/transactions/history?page=${page}&limit=${limit}`,
-    { method: "GET" },
-    "No pudimos cargar el historial."
-  );
-
 export const apiGetHistory = async (
   page = 1,
   limit = 50,
 ): Promise<ApiHistory> => {
   try {
     return await authedFetch<ApiHistory>(
-      `/api/wallets/history?page=${page}&limit=${limit}`,
+      `/api/transactions/history?page=${page}&limit=${limit}`,
       { method: "GET" },
       "No pudimos cargar el historial.",
     );
