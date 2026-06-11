@@ -93,7 +93,7 @@ exit={{
     sm:rounded-3xl
 
     border border-white/10
-    bg-slate-950/95
+    bg-slate-950/96
     backdrop-blur-2xl
     shadow-[0_0_50px_rgba(6,182,212,0.15)]
   ">
