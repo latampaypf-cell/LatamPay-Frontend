@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   ChevronRight,
+  Copy,
+  CreditCard,
+  Hash,
   History,
   Info,
-  Mail,
-  Shield,
   User,
   Wallet,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useWallet } from "../../context/WalletContext";
-import { TransactionHistory } from "../../components/transactions/TransactionHistory";
+import { TransactionsExplorer } from "../../components/transactions/TransactionsExplorer";
 
 type Section = "profile" | "history" | "about";
+
+const VALID_SECTIONS: Section[] = ["profile", "history", "about"];
+
+const parseSection = (value: string | null): Section | null =>
+  value && (VALID_SECTIONS as string[]).includes(value) ? (value as Section) : null;
 
 const sidebarLinks: {
   id: Section;
   label: string;
   icon: typeof User;
 }[] = [
-  { id: "profile", label: "Perfil", icon: User },
+  { id: "profile", label: "CBU/Alias", icon: CreditCard },
   { id: "history", label: "Historial", icon: History },
   { id: "about", label: "Acerca de LatamPay", icon: Info },
 ];
@@ -31,12 +39,26 @@ const isDesktop = () =>
 
 export const More = () => {
   const { user } = useAuth();
-  const { transactions } = useWallet();
+  const { transactions, cbu, alias } = useWallet();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleCopy = async (value: string | null, label: string) => {
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success(`${label} copiado al portapapeles`);
+    } catch {
+      toast.error(`No pudimos copiar el ${label.toLowerCase()}`);
+    }
+  };
 
   // null = vista de menú (solo mobile). En desktop siempre hay sección activa.
-  const [section, setSection] = useState<Section | null>(() =>
-    isDesktop() ? "profile" : null,
-  );
+  // Prioridad inicial: ?section=... > default desktop ("profile") > null en mobile.
+  const [section, setSection] = useState<Section | null>(() => {
+    const fromUrl = parseSection(searchParams.get("section"));
+    if (fromUrl) return fromUrl;
+    return isDesktop() ? "profile" : null;
+  });
 
   // Si el viewport cambia a desktop y no hay sección, seleccionamos la primera.
   useEffect(() => {
@@ -47,6 +69,21 @@ export const More = () => {
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [section]);
+
+  // Si la URL cambia mientras estamos en la página, sincronizamos.
+  useEffect(() => {
+    const fromUrl = parseSection(searchParams.get("section"));
+    if (fromUrl && fromUrl !== section) setSection(fromUrl);
+  }, [searchParams, section]);
+
+  const handleSelectSection = (next: Section) => {
+    setSection(next);
+    if (searchParams.get("section") !== next) {
+      const params = new URLSearchParams(searchParams);
+      params.set("section", next);
+      setSearchParams(params, { replace: true });
+    }
+  };
 
   const activeLink = sidebarLinks.find((l) => l.id === section);
 
@@ -81,10 +118,14 @@ export const More = () => {
             opciones
           </h1>
 
-          <p className="mt-3 max-w-2xl text-sm text-slate-400 md:text-base">
-            Accedé a tu perfil, revisá el historial de tus movimientos y
-            conocé más sobre LatamPay.
-          </p>
+          <div className="mt-3">
+            <p className="text-lg font-semibold text-white md:text-xl">
+              {user?.name ?? "Usuario"}
+            </p>
+            <p className="text-sm text-slate-400 md:text-base">
+              {user?.email ?? "—"}
+            </p>
+          </div>
         </motion.div>
 
         <div className="mt-6 grid gap-6 md:mt-10 md:grid-cols-[260px_1fr]">
@@ -104,7 +145,7 @@ export const More = () => {
                     <li key={link.id}>
                       <button
                         type="button"
-                        onClick={() => setSection(link.id)}
+                        onClick={() => handleSelectSection(link.id)}
                         className={`flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-4 text-left transition-all md:py-3 ${
                           isActive
                             ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)]"
@@ -156,36 +197,61 @@ export const More = () => {
               >
                 <div className="flex items-center gap-4">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 md:h-16 md:w-16">
-                    <User size={28} className="text-cyan-400 md:h-8 md:w-8" />
+                    <CreditCard
+                      size={28}
+                      className="text-cyan-400 md:h-8 md:w-8"
+                    />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold md:text-2xl">
-                      {user?.name ?? "Usuario"}
-                    </h2>
+                    <h2 className="text-xl font-bold md:text-2xl">CBU / Alias</h2>
                     <p className="text-xs text-slate-400 md:text-sm">
-                      Información de tu perfil
+                      Datos de tu cuenta para recibir transferencias
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2">
                   <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-5">
-                    <div className="flex items-center gap-2 text-slate-400">
-                      <Mail size={16} />
-                      <span className="text-sm">Email</span>
+                    <div className="flex items-center justify-between gap-2 text-slate-400">
+                      <div className="flex items-center gap-2">
+                        <Hash size={16} />
+                        <span className="text-sm">Alias</span>
+                      </div>
+                      {alias && (
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(alias, "Alias")}
+                          className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
+                          aria-label="Copiar alias"
+                        >
+                          <Copy size={14} />
+                        </button>
+                      )}
                     </div>
                     <p className="mt-2 break-all font-medium">
-                      {user?.email ?? "—"}
+                      {alias ?? "—"}
                     </p>
                   </div>
 
                   <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-5">
-                    <div className="flex items-center gap-2 text-slate-400">
-                      <Shield size={16} />
-                      <span className="text-sm">Rol</span>
+                    <div className="flex items-center justify-between gap-2 text-slate-400">
+                      <div className="flex items-center gap-2">
+                        <CreditCard size={16} />
+                        <span className="text-sm">CBU</span>
+                      </div>
+                      {cbu && (
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(cbu, "CBU")}
+                          className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
+                          aria-label="Copiar CBU"
+                        >
+                          <Copy size={14} />
+                        </button>
+                      )}
                     </div>
-                    <p className="mt-2 font-medium capitalize">
-                      {user?.role ?? "user"}
+                    <p className="mt-2 break-all font-mono text-sm font-medium">
+                      {cbu ?? "—"}
                     </p>
                   </div>
                 </div>
@@ -215,7 +281,7 @@ export const More = () => {
                 </div>
 
                 <div className="mt-6 md:mt-8">
-                  <TransactionHistory transactions={transactions} />
+                  <TransactionsExplorer transactions={transactions} />
                 </div>
               </motion.div>
             )}
