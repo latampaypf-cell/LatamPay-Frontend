@@ -50,13 +50,40 @@ export const ReceiveModal = ({
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 30 }}
+           initial={{
+  opacity: 0,
+  scale: window.innerWidth >= 640 ? 0.95 : 1,
+  y: window.innerWidth >= 640 ? 30 : 100,
+}}
+animate={{
+  opacity: 1,
+  scale: 1,
+  y: 0,
+}}
+exit={{
+  opacity: 0,
+  scale: window.innerWidth >= 640 ? 0.95 : 1,
+  y: window.innerWidth >= 640 ? 30 : 100,
+}}
             transition={{ duration: 0.25 }}
-            className="fixed left-1/2 top-1/2 z-50 w-[92%] max-w-lg -translate-x-1/2 -translate-y-1/2"
+            className="
+  fixed z-50
+  w-full sm:w-[92%] sm:max-w-lg
+  bottom-0 left-0
+  sm:left-1/2 sm:top-1/2
+  sm:-translate-x-1/2 sm:-translate-y-1/2
+"
           >
-            <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950/95 backdrop-blur-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)]">
+            <div className="
+    max-h-[90vh]
+    overflow-y-auto
+    rounded-t-[2rem]
+    sm:rounded-3xl
+    border border-white/10
+    bg-slate-950/95
+    backdrop-blur-2xl
+    shadow-[0_0_50px_rgba(6,182,212,0.15)]
+  ">
 
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 p-6">
