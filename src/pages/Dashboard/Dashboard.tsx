@@ -42,15 +42,15 @@ type QuickAction = {
 
 export const Dashboard = () => {
   const { user } = useAuth();
-const {
-  balances,
-  transactions,
-  cbu,
-  alias,
-  isLoading: isWalletLoading,
-  error: walletError,
-  refresh: refreshWallet,
-} = useWallet();
+  const {
+    balances,
+    transactions,
+    cbu,
+    alias,
+    isLoading: isWalletLoading,
+    error: walletError,
+    refresh: refreshWallet,
+  } = useWallet();
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isReceiveOpen, setIsReceiveOpen] = useState(false);
   const [isConvertOpen, setIsConvertOpen] = useState(false);
@@ -341,11 +341,11 @@ const {
         onClose={() => setIsTransferOpen(false)}
       />
       <ReceiveModal
-  open={isReceiveOpen}
-  onClose={() => setIsReceiveOpen(false)}
-  alias={alias}
-  cbu={cbu}
-/>
+        open={isReceiveOpen}
+        onClose={() => setIsReceiveOpen(false)}
+        alias={alias}
+        cbu={cbu}
+      />
 
       <ConvertModal
         open={isConvertOpen}
