@@ -23,6 +23,7 @@ import {
   type ExchangeRateKey,
   type ExchangeRatesMap,
   type Transaction,
+  type TransactionKind,
   type WalletContextValue,
 } from "../types/wallet/wallet.types";
 
@@ -47,38 +48,46 @@ const mapTransaction = (t: ApiTransaction): Transaction => {
   const toAmount = Number(t.to_amount ?? 0);
   let title = "";
   let amount = 0;
+  let kind: TransactionKind = "other";
 
   switch (t.type) {
     case "transfer":
       if (t.direction === "sent") {
         title = "Transferencia enviada";
         amount = -fromAmount;
+        kind = "transfer_sent";
       } else {
         title = "Transferencia recibida";
         amount = toAmount;
+        kind = "transfer_received";
       }
       break;
     case "deposit":
       title = "Depósito";
       amount = toAmount;
+      kind = "deposit";
       break;
     case "withdraw":
       title = "Retiro";
       amount = -fromAmount;
+      kind = "withdraw";
       break;
     case "swap":
       title = `Conversión ${t.from_currency ?? ""} → ${t.to_currency ?? ""}`.trim();
       amount = t.direction === "sent" ? -fromAmount : toAmount;
+      kind = "swap";
       break;
     default:
       title = t.type;
       amount = t.direction === "sent" ? -fromAmount : toAmount;
+      kind = "other";
   }
 
   return {
     id: t.id,
     title,
     amount,
+    kind,
     createdAt: t.created_at,
   };
 };
@@ -88,6 +97,8 @@ type WalletState = {
   balances: CurrencyBalances;
   transactions: Transaction[];
   rates: ExchangeRatesMap;
+  cbu: string | null;
+  alias: string | null;
   isLoading: boolean;
   error: string | null;
 };
@@ -97,6 +108,8 @@ const INITIAL_STATE: WalletState = {
   balances: { ...EMPTY_BALANCES },
   transactions: [],
   rates: {},
+  cbu: null,
+  alias: null,
   isLoading: false,
   error: null,
 };
@@ -147,6 +160,8 @@ export function WalletProvider({ children }: WalletProviderProps) {
         balances,
         transactions,
         rates,
+        cbu: wallet?.cbu ?? null,
+        alias: wallet?.alias ?? null,
         isLoading: false,
         error: null,
       });
@@ -269,6 +284,8 @@ export function WalletProvider({ children }: WalletProviderProps) {
       balances: state.balances,
       transactions: state.transactions,
       rates: state.rates,
+      cbu: state.cbu,
+      alias: state.alias,
       isLoading: state.isLoading,
       error: state.error,
       canAfford,
@@ -282,6 +299,8 @@ export function WalletProvider({ children }: WalletProviderProps) {
       state.balances,
       state.transactions,
       state.rates,
+      state.cbu,
+      state.alias,
       state.isLoading,
       state.error,
       canAfford,

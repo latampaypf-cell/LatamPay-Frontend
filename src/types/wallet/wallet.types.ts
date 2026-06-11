@@ -106,10 +106,19 @@ export type DepositResult = {
   currency: string;
 };
 
+export type TransactionKind =
+  | "transfer_sent"
+  | "transfer_received"
+  | "deposit"
+  | "withdraw"
+  | "swap"
+  | "other";
+
 export type Transaction = {
   id: string;
   title: string;
   amount: number;
+  kind: TransactionKind;
   reason?: string;
   createdAt: string;
 };
@@ -126,6 +135,8 @@ export type WalletContextValue = {
   balances: CurrencyBalances;
   transactions: Transaction[];
   rates: ExchangeRatesMap;
+  cbu: string | null;
+  alias: string | null;
   isLoading: boolean;
   error: string | null;
   canAfford: (amount: number, currency: Currency) => boolean;
