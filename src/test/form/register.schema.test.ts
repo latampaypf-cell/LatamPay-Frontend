@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { registerSchema } from "../schemas/register.schema";
+import { registerSchema } from "../../schemas/register.schema";
 
 const baseValidInput = {
   name: "Juan Perez",

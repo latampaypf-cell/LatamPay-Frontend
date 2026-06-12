@@ -1,8 +1,9 @@
 import type { FormEvent } from "react";
-import { Coins, DollarSign, FileText, Send, User } from "lucide-react";
+import { Coins, DollarSign, FileText, MessageSquare, Send, User } from "lucide-react";
 import { Input } from "../../input/Input";
 import { Button } from "../../button/Button";
 import {
+  DESCRIPTION_MAX_LENGTH,
   transferCurrencies,
   transferReasons,
   type TransferFormFields,
@@ -15,6 +16,7 @@ export type FormStepProps = {
   amount: string;
   currency: Currency;
   reason: TransferReason;
+  description: string;
   onChange: (patch: Partial<TransferFormFields>) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
@@ -24,6 +26,7 @@ export const FormStep = ({
   amount,
   currency,
   reason,
+  description,
   onChange,
   onSubmit,
 }: FormStepProps) => (
@@ -104,6 +107,18 @@ export const FormStep = ({
           </select>
         </div>
       </div>
+
+      <Input
+        label="Descripción (opcional)"
+        value={description}
+        onChange={(e) =>
+          onChange({ description: e.target.value.slice(0, DESCRIPTION_MAX_LENGTH) })
+        }
+        placeholder="Ej: Mitad del asado"
+        maxLength={DESCRIPTION_MAX_LENGTH}
+        leftIcon={MessageSquare}
+        hint={`${description.length}/${DESCRIPTION_MAX_LENGTH} caracteres`}
+      />
 
       <Button type="submit" leftIcon={Send} fullWidth className="mt-2">
         Enviar

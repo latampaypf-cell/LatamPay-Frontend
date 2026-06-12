@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
 import {
   ArrowLeft,
   ChevronRight,
-  Copy,
   CreditCard,
-  Hash,
   History,
   Info,
   User,
@@ -16,6 +13,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useWallet } from "../../context/WalletContext";
 import { TransactionsExplorer } from "../../components/transactions/TransactionsExplorer";
+import { AliasCbuPanel } from "../../components/receiveModal/AliasCbuPanel";
 
 type Section = "profile" | "history" | "about";
 
@@ -41,16 +39,6 @@ export const More = () => {
   const { user } = useAuth();
   const { transactions, cbu, alias } = useWallet();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleCopy = async (value: string | null, label: string) => {
-    if (!value) return;
-    try {
-      await navigator.clipboard.writeText(value);
-      toast.success(`${label} copiado al portapapeles`);
-    } catch {
-      toast.error(`No pudimos copiar el ${label.toLowerCase()}`);
-    }
-  };
 
   // null = vista de menú (solo mobile). En desktop siempre hay sección activa.
   // Prioridad inicial: ?section=... > default desktop ("profile") > null en mobile.
@@ -210,50 +198,8 @@ export const More = () => {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-5">
-                    <div className="flex items-center justify-between gap-2 text-slate-400">
-                      <div className="flex items-center gap-2">
-                        <Hash size={16} />
-                        <span className="text-sm">Alias</span>
-                      </div>
-                      {alias && (
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(alias, "Alias")}
-                          className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
-                          aria-label="Copiar alias"
-                        >
-                          <Copy size={14} />
-                        </button>
-                      )}
-                    </div>
-                    <p className="mt-2 break-all font-medium">
-                      {alias ?? "—"}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-5">
-                    <div className="flex items-center justify-between gap-2 text-slate-400">
-                      <div className="flex items-center gap-2">
-                        <CreditCard size={16} />
-                        <span className="text-sm">CBU</span>
-                      </div>
-                      {cbu && (
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(cbu, "CBU")}
-                          className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
-                          aria-label="Copiar CBU"
-                        >
-                          <Copy size={14} />
-                        </button>
-                      )}
-                    </div>
-                    <p className="mt-2 break-all font-mono text-sm font-medium">
-                      {cbu ?? "—"}
-                    </p>
-                  </div>
+                <div className="mt-6 md:mt-8">
+                  <AliasCbuPanel alias={alias} cbu={cbu} />
                 </div>
               </motion.div>
             )}

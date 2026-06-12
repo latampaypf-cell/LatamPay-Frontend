@@ -53,8 +53,7 @@ export const TransactionHistory = ({
       {visible.map((tx) => (
         <TransactionRow
           key={tx.id}
-          title={tx.title}
-          amount={tx.amount}
+          transaction={tx}
           date={formatTransactionDate(tx.createdAt)}
         />
       ))}

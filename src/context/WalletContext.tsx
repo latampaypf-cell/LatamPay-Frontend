@@ -17,15 +17,14 @@ import {
 } from "../services/wallet.api";
 import {
   SUPPORTED_CURRENCIES,
-  type ApiTransaction,
   type Currency,
   type CurrencyBalances,
   type ExchangeRateKey,
   type ExchangeRatesMap,
   type Transaction,
-  type TransactionKind,
   type WalletContextValue,
 } from "../types/wallet/wallet.types";
+import { isCurrency, mapTransaction } from "../utils/transaction.mapper";
 
 export type {
   Transaction,
@@ -42,55 +41,6 @@ const EMPTY_BALANCES: CurrencyBalances = SUPPORTED_CURRENCIES.reduce(
   },
   {} as CurrencyBalances,
 );
-
-const mapTransaction = (t: ApiTransaction): Transaction => {
-  const fromAmount = Number(t.from_amount ?? 0);
-  const toAmount = Number(t.to_amount ?? 0);
-  let title = "";
-  let amount = 0;
-  let kind: TransactionKind = "other";
-
-  switch (t.type) {
-    case "transfer":
-      if (t.direction === "sent") {
-        title = "Transferencia enviada";
-        amount = -fromAmount;
-        kind = "transfer_sent";
-      } else {
-        title = "Transferencia recibida";
-        amount = toAmount;
-        kind = "transfer_received";
-      }
-      break;
-    case "deposit":
-      title = "Depósito";
-      amount = toAmount;
-      kind = "deposit";
-      break;
-    case "withdraw":
-      title = "Retiro";
-      amount = -fromAmount;
-      kind = "withdraw";
-      break;
-    case "swap":
-      title = `Conversión ${t.from_currency ?? ""} → ${t.to_currency ?? ""}`.trim();
-      amount = t.direction === "sent" ? -fromAmount : toAmount;
-      kind = "swap";
-      break;
-    default:
-      title = t.type;
-      amount = t.direction === "sent" ? -fromAmount : toAmount;
-      kind = "other";
-  }
-
-  return {
-    id: t.id,
-    title,
-    amount,
-    kind,
-    createdAt: t.created_at,
-  };
-};
 
 type WalletState = {
   balance: number;
@@ -113,9 +63,6 @@ const INITIAL_STATE: WalletState = {
   isLoading: false,
   error: null,
 };
-
-const isCurrency = (code: string): code is Currency =>
-  (SUPPORTED_CURRENCIES as string[]).includes(code);
 
 const WalletContext = createContext<WalletContextValue | null>(null);
 
@@ -208,6 +155,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
           to_identifier: input.destination.trim(),
           amount: input.amount,
           currency_code: input.currency,
+          description: input.description?.trim() || undefined,
         });
         await refresh();
         return { ok: true };

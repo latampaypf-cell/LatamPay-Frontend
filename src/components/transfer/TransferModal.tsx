@@ -45,6 +45,7 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
       amount: state.amount,
       currency: state.currency,
       reason: state.reason,
+      description: state.description,
     });
     if (!result.ok) {
       toast.error(result.error);
@@ -89,6 +90,7 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
         destination: state.destination,
         currency: state.currency,
         reason: state.reason || undefined,
+        description: state.description.trim() || undefined,
       });
       if (!result.ok) {
         const available = balances[state.currency] ?? 0;
@@ -120,6 +122,7 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
           amount={state.amount}
           currency={state.currency}
           reason={state.reason}
+          description={state.description}
           onChange={(patch) =>
             dispatch({ type: "UPDATE_FORM", payload: patch })
           }
@@ -133,6 +136,7 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
           amount={state.amount}
           currency={state.currency}
           reason={state.reason}
+          description={state.description}
           userEmail={user?.email}
           password={state.password}
           isVerifying={state.isVerifying}

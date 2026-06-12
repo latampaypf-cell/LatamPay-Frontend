@@ -2,7 +2,7 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReactNode } from "react";
 
-import { AuthProvider, useAuth } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../../context/AuthContext";
 
 // Mocks (hoisted) ------------------------------------------------------------
 
@@ -17,13 +17,13 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("../services/auth.api", () => ({
+vi.mock("../../services/auth.api", () => ({
   apiLogin: mocks.apiLogin,
   apiMe: mocks.apiMe,
   apiRegister: mocks.apiRegister,
 }));
 
-vi.mock("../services/authStorage", () => ({
+vi.mock("../../services/authStorage", () => ({
   authStorage: mocks.storage,
 }));
 
