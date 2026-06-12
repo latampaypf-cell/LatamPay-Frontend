@@ -2,25 +2,42 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeftRight, Coins, TrendingUp } from "lucide-react";
 import {
-  convert,
   currencies,
   formatAmount,
   getCurrency,
   type CurrencyCode,
 } from "../../services/exchangeCurrency";
+import { useLiveRates } from "../../hooks/useLiveRates";
+import { LiveRatesGrid } from "../../components/exchange/LiveRatesGrid";
+import type { Currency } from "../../types/wallet/wallet.types";
+
+const QUOTE_PAIRS: { from: Currency; to: Currency; symbol: string }[] = [
+  { from: "ARS", to: "COP", symbol: "$" },
+  { from: "ARS", to: "VES", symbol: "Bs. " },
+  { from: "COP", to: "VES", symbol: "Bs. " },
+  { from: "COP", to: "ARS", symbol: "$" },
+  { from: "VES", to: "ARS", symbol: "$" },
+  { from: "VES", to: "COP", symbol: "$" },
+];
 
 export const Services = () => {
   const [amount, setAmount] = useState<string>("1000");
   const [from, setFrom] = useState<CurrencyCode>("ARS");
   const [to, setTo] = useState<CurrencyCode>("COP");
 
-  const numericAmount = Number(amount.replace(",", "."));
-  const converted = useMemo(
-    () => convert(numericAmount, from, to),
-    [numericAmount, from, to],
-  );
+  const { rates, lastUpdated, isLoading, error } = useLiveRates();
 
-  const rate = useMemo(() => convert(1, from, to), [from, to]);
+  const numericAmount = Number(amount.replace(",", "."));
+
+  const rate = useMemo<number | null>(() => {
+    if (from === to) return 1;
+    return rates[from]?.[to] ?? null;
+  }, [rates, from, to]);
+
+  const converted = useMemo<number | null>(() => {
+    if (rate === null || Number.isNaN(numericAmount)) return null;
+    return numericAmount * rate;
+  }, [numericAmount, rate]);
 
   const swap = () => {
     setFrom(to);
@@ -29,6 +46,12 @@ export const Services = () => {
 
   const fromCurrency = getCurrency(from);
   const toCurrency = getCurrency(to);
+
+  const lastUpdatedLabel = lastUpdated
+    ? `Actualizado ${new Date(lastUpdated).toLocaleTimeString("es-AR")}`
+    : isLoading
+      ? "Cargando cotizaciones…"
+      : "Sin datos";
 
   return (
     <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-slate-950 px-6 py-12 text-white">
@@ -67,8 +90,8 @@ export const Services = () => {
 
           <p className="mt-3 max-w-2xl text-slate-400">
             Convertí entre pesos argentinos, pesos colombianos y bolívares
-            venezolanos en tiempo real. Las cotizaciones son simuladas con fines
-            demostrativos.
+            venezolanos con cotizaciones actualizadas desde nuestra base de
+            datos.
           </p>
         </motion.div>
 
@@ -86,11 +109,15 @@ export const Services = () => {
 
             <div>
               <h2 className="text-2xl font-bold">Conversor de divisas</h2>
-              <p className="text-sm text-slate-400">
-                Cotización simulada en tiempo real
-              </p>
+              <p className="text-sm text-slate-400">{lastUpdatedLabel}</p>
             </div>
           </div>
+
+          {error && (
+            <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {error}
+            </div>
+          )}
 
           <div className="mt-8 grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-end">
             {/* Desde */}
@@ -147,7 +174,11 @@ export const Services = () => {
               </select>
 
               <div className="mt-4 w-full rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-4 text-2xl font-semibold text-cyan-300">
-                {toCurrency.symbol} {formatAmount(converted)}
+                {converted === null
+                  ? isLoading
+                    ? "Cargando…"
+                    : "—"
+                  : `${toCurrency.symbol} ${formatAmount(converted)}`}
               </div>
             </div>
           </div>
@@ -162,7 +193,7 @@ export const Services = () => {
               <p className="mt-2 text-lg font-semibold">
                 1 {fromCurrency.code} ={" "}
                 <span className="text-cyan-400">
-                  {formatAmount(rate)} {toCurrency.code}
+                  {rate === null ? "—" : formatAmount(rate)} {toCurrency.code}
                 </span>
               </p>
             </div>
@@ -175,7 +206,8 @@ export const Services = () => {
               <p className="mt-2 text-lg font-semibold">
                 {formatAmount(numericAmount || 0)} {fromCurrency.code} →{" "}
                 <span className="text-cyan-400">
-                  {formatAmount(converted)} {toCurrency.code}
+                  {converted === null ? "—" : formatAmount(converted)}{" "}
+                  {toCurrency.code}
                 </span>
               </p>
             </div>
@@ -189,35 +221,18 @@ export const Services = () => {
           transition={{ delay: 0.3 }}
           className="mt-10"
         >
-          <h2 className="mb-4 text-xl font-semibold">Cotizaciones del día</h2>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {currencies.map((c) => (
-              <div
-                key={c.code}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
-              >
-                <p className="text-3xl">{c.flag}</p>
-                <p className="mt-2 text-slate-400">{c.label}</p>
-                <p className="mt-1 text-lg font-semibold text-cyan-400">
-                  {c.code}
-                </p>
-
-                <div className="mt-4 space-y-1 text-sm text-slate-400">
-                  {currencies
-                    .filter((x) => x.code !== c.code)
-                    .map((x) => (
-                      <p key={x.code}>
-                        1 {c.code} ={" "}
-                        <span className="text-white">
-                          {formatAmount(convert(1, c.code, x.code))} {x.code}
-                        </span>
-                      </p>
-                    ))}
-                </div>
-              </div>
-            ))}
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <h2 className="text-xl font-semibold">Cotizaciones del día</h2>
+            <span className="text-xs text-slate-500">
+              Fuente: base de datos LatamPay
+            </span>
           </div>
+
+          <LiveRatesGrid
+            pairs={QUOTE_PAIRS}
+            variant="detailed"
+            showFooter
+          />
         </motion.section>
       </div>
     </section>
