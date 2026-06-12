@@ -7,15 +7,12 @@ import {
   ChevronDown,
   CreditCard,
   Settings,
-  Hash,
-  Copy,
   CircleUser,
 } from "lucide-react";
-import { toast } from "sonner";
 import logoLatamPay from "../../assets/Logo.svg";
 import { useAuth } from "../../context/AuthContext";
 import { useWallet } from "../../context/WalletContext";
-import { Modal } from "../ui/Modal";
+import { ReceiveModal } from "../receiveModal/ReceiveModal";
 import { paths } from "../../routes/paths";
 import { privateNavItems } from "../../routes/nav";
 import type { NavItem } from "../../routes/nav";
@@ -49,16 +46,6 @@ export function PrivateNavbar({
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, [isUserMenuOpen]);
-
-  const handleCopy = async (value: string | null, label: string) => {
-    if (!value) return;
-    try {
-      await navigator.clipboard.writeText(value);
-      toast.success(`${label} copiado al portapapeles`);
-    } catch {
-      toast.error(`No pudimos copiar el ${label.toLowerCase()}`);
-    }
-  };
 
   const openCbuModal = () => {
     setIsUserMenuOpen(false);
@@ -216,67 +203,14 @@ export function PrivateNavbar({
         </div>
       )}
 
-      <Modal
+      <ReceiveModal
         open={isCbuModalOpen}
         onClose={() => setIsCbuModalOpen(false)}
-        ariaLabel="Mi CBU y Alias"
-      >
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10">
-            <CreditCard size={22} className="text-cyan-400" />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold">CBU / Alias</h2>
-            <p className="text-xs text-slate-400">
-              Datos para recibir transferencias
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-4">
-          <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
-            <div className="flex items-center justify-between gap-2 text-slate-400">
-              <div className="flex items-center gap-2">
-                <Hash size={16} />
-                <span className="text-sm">Alias</span>
-              </div>
-              {alias && (
-                <button
-                  type="button"
-                  onClick={() => handleCopy(alias, "Alias")}
-                  aria-label="Copiar alias"
-                  className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
-                >
-                  <Copy size={14} />
-                </button>
-              )}
-            </div>
-            <p className="mt-2 break-all font-medium">{alias ?? "—"}</p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
-            <div className="flex items-center justify-between gap-2 text-slate-400">
-              <div className="flex items-center gap-2">
-                <CreditCard size={16} />
-                <span className="text-sm">CBU</span>
-              </div>
-              {cbu && (
-                <button
-                  type="button"
-                  onClick={() => handleCopy(cbu, "CBU")}
-                  aria-label="Copiar CBU"
-                  className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-cyan-400"
-                >
-                  <Copy size={14} />
-                </button>
-              )}
-            </div>
-            <p className="mt-2 break-all font-mono text-sm font-medium">
-              {cbu ?? "—"}
-            </p>
-          </div>
-        </div>
-      </Modal>
+        alias={alias ?? undefined}
+        cbu={cbu ?? undefined}
+        title="Mi CBU"
+        subtitle="Tus datos para recibir transferencias."
+      />
     </nav>
   );
 }
