@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { apiLogin, apiMe, apiRegister } from "../services/auth.api";
+import { apiLogin, apiMe, apiRegister } from "../../services/auth.api";
 
 type MockResponseInit = {
   ok?: boolean;

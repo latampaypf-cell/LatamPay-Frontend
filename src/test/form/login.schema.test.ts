@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loginSchema } from "../schemas/login.schema";
+import { loginSchema } from "../../schemas/login.schema";
 
 const validInput = {
   email: "test@example.com",

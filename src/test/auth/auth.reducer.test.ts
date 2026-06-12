@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { authReducer } from "../context/reducer/auth.reducer";
-import { initialAuthState } from "../context/reducer/auth.initialState";
+import { authReducer } from "../../context/reducer/auth.reducer";
+import { initialAuthState } from "../../context/reducer/auth.initialState";
 import {
   loginSuccess,
   logoutAction,
   sessionFailed,
   sessionRestored,
-} from "../context/reducer/auth.actions";
-import type { AuthUser } from "../context/reducer/auth.types";
+} from "../../context/reducer/auth.actions";
+import type { AuthUser } from "../../context/reducer/auth.types";
 
 const fakeUser: AuthUser = {
   id: "u-1",
