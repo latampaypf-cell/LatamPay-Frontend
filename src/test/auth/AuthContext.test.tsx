@@ -17,13 +17,13 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("../services/auth.api", () => ({
+vi.mock("../../services/auth.api", () => ({
   apiLogin: mocks.apiLogin,
   apiMe: mocks.apiMe,
   apiRegister: mocks.apiRegister,
 }));
 
-vi.mock("../services/authStorage", () => ({
+vi.mock("../../services/authStorage", () => ({
   authStorage: mocks.storage,
 }));
 
