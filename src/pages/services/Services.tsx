@@ -9,6 +9,7 @@ import {
 } from "../../services/exchangeCurrency";
 import { useLiveRates } from "../../hooks/useLiveRates";
 import { LiveRatesGrid } from "../../components/exchange/LiveRatesGrid";
+import { BudgetsSection } from "../../components/budgets/BudgetsSection";
 import type { Currency } from "../../types/wallet/wallet.types";
 
 const QUOTE_PAIRS: { from: Currency; to: Currency; symbol: string }[] = [
@@ -234,6 +235,9 @@ export const Services = () => {
             showFooter
           />
         </motion.section>
+
+        {/* Presupuestos (próximamente) */}
+        <BudgetsSection className="mt-10" />
       </div>
     </section>
   );
