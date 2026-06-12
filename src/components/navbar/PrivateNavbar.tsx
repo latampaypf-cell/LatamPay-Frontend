@@ -9,6 +9,7 @@ import {
   Settings,
   Hash,
   Copy,
+  CircleUser,
 } from "lucide-react";
 import { toast } from "sonner";
 import logoLatamPay from "../../assets/Logo.svg";
@@ -109,7 +110,11 @@ export function PrivateNavbar({
               aria-expanded={isUserMenuOpen}
               className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-300 transition-all hover:bg-white/5 hover:text-white"
             >
-              <span>{user?.name}</span>
+               <CircleUser
+    size={20}
+    className="text-cyan-400"
+  />
+              
               <ChevronDown
                 size={16}
                 className={`transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
