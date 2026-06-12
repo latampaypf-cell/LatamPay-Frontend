@@ -27,11 +27,14 @@ export const transferCurrencies: { value: Currency; label: string }[] = [
   { value: "VES", label: "VES — Bolívar venezolano" },
 ];
 
+export const DESCRIPTION_MAX_LENGTH = 100;
+
 export type TransferFormFields = {
   destination: string;
   amount: string;
   currency: Currency;
   reason: TransferReason;
+  description: string;
 };
 
 export type TransferStep = "form" | "confirm" | "success";
