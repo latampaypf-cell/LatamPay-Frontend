@@ -36,6 +36,13 @@ export type ApiTransaction = {
   exchange_rate: number | string | null;
   created_at: string;
   direction: ApiTransactionDirection;
+  description?: string | null;
+  from_name?: string | null;
+  from_alias?: string | null;
+  from_cbu?: string | null;
+  to_name?: string | null;
+  to_alias?: string | null;
+  to_cbu?: string | null;
 };
 
 export type ApiHistoryPagination = {
@@ -54,6 +61,7 @@ export type TransferPayload = {
   to_identifier: string;
   amount: number;
   currency_code: string;
+  description?: string;
 };
 
 export type TransferResult = {
@@ -114,6 +122,13 @@ export type TransactionKind =
   | "swap"
   | "other";
 
+export type TransactionStatus =
+  | "completed"
+  | "pending"
+  | "cancelled"
+  | "failed"
+  | string;
+
 export type Transaction = {
   id: string;
   title: string;
@@ -121,6 +136,12 @@ export type Transaction = {
   kind: TransactionKind;
   reason?: string;
   createdAt: string;
+  status: TransactionStatus;
+  description?: string;
+  counterpartyName?: string;
+  counterpartyCbu?: string;
+  currency?: Currency;
+  direction: ApiTransactionDirection;
 };
 
 export type TransferInput = {
@@ -128,6 +149,7 @@ export type TransferInput = {
   destination: string;
   currency: Currency;
   reason?: string;
+  description?: string;
 };
 
 export type WalletContextValue = {

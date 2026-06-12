@@ -1,4 +1,7 @@
-import type { TransferFormFields } from "../../types/transfer/transfer.types";
+import {
+  DESCRIPTION_MAX_LENGTH,
+  type TransferFormFields,
+} from "../../types/transfer/transfer.types";
 import { SUPPORTED_CURRENCIES } from "../../types/wallet/wallet.types";
 
 export type ValidationResult = { ok: true } | { ok: false; error: string };
@@ -18,6 +21,12 @@ export const validateDraft = (
   }
   if (!form.reason) {
     return { ok: false, error: "Seleccioná un motivo." };
+  }
+  if (form.description.length > DESCRIPTION_MAX_LENGTH) {
+    return {
+      ok: false,
+      error: `La descripción no puede superar los ${DESCRIPTION_MAX_LENGTH} caracteres.`,
+    };
   }
   return { ok: true };
 };

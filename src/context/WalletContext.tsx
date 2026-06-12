@@ -49,17 +49,22 @@ const mapTransaction = (t: ApiTransaction): Transaction => {
   let title = "";
   let amount = 0;
   let kind: TransactionKind = "other";
+  let counterpartyName: string | undefined;
+  let counterpartyCbu: string | undefined;
 
   switch (t.type) {
     case "transfer":
+      title = "Transferencia";
       if (t.direction === "sent") {
-        title = "Transferencia enviada";
         amount = -fromAmount;
         kind = "transfer_sent";
+        counterpartyName = t.to_name ?? undefined;
+        counterpartyCbu = t.to_cbu ?? undefined;
       } else {
-        title = "Transferencia recibida";
         amount = toAmount;
         kind = "transfer_received";
+        counterpartyName = t.from_name ?? undefined;
+        counterpartyCbu = t.from_cbu ?? undefined;
       }
       break;
     case "deposit":
@@ -83,12 +88,23 @@ const mapTransaction = (t: ApiTransaction): Transaction => {
       kind = "other";
   }
 
+  const currencyCode =
+    t.direction === "sent" ? t.from_currency : t.to_currency;
+  const currency =
+    currencyCode && isCurrency(currencyCode) ? currencyCode : undefined;
+
   return {
     id: t.id,
     title,
     amount,
     kind,
     createdAt: t.created_at,
+    status: t.status,
+    description: t.description ?? undefined,
+    counterpartyName,
+    counterpartyCbu,
+    currency,
+    direction: t.direction,
   };
 };
 
@@ -208,6 +224,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
           to_identifier: input.destination.trim(),
           amount: input.amount,
           currency_code: input.currency,
+          description: input.description?.trim() || undefined,
         });
         await refresh();
         return { ok: true };

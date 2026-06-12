@@ -9,6 +9,7 @@ export const initialTransferState: TransferState = {
   amount: "",
   currency: "ARS",
   reason: "",
+  description: "",
   password: "",
   showPassword: false,
   isVerifying: false,

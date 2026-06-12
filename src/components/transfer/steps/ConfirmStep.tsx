@@ -15,6 +15,7 @@ export type ConfirmStepProps = {
   amount: string;
   currency: Currency;
   reason: TransferReason;
+  description: string;
   userEmail?: string;
   password: string;
   isVerifying: boolean;
@@ -28,6 +29,7 @@ export const ConfirmStep = ({
   amount,
   currency,
   reason,
+  description,
   userEmail,
   password,
   isVerifying,
@@ -76,6 +78,12 @@ export const ConfirmStep = ({
             <span className="text-slate-400">Motivo</span>
             <span className="text-right">{reasonLabel}</span>
           </div>
+          {description.trim() && (
+            <div className="flex justify-between gap-3">
+              <span className="shrink-0 text-slate-400">Descripción</span>
+              <span className="break-words text-right">{description}</span>
+            </div>
+          )}
           <div className="flex justify-between gap-3">
             <span className="text-slate-400">Desde</span>
             <span className="break-all text-right">{userEmail ?? "—"}</span>
