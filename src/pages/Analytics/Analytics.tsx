@@ -366,8 +366,8 @@ export const Analytics = () => {
               </div>
 
               {yearlyHasData ? (
-                <div className="h-72 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="w-full min-w-0">
+                  <ResponsiveContainer width="100%" height={288} minWidth={0}>
                     <BarChart
                       data={yearly}
                       margin={{ top: 10, right: 10, bottom: 0, left: -10 }}
@@ -439,8 +439,8 @@ export const Analytics = () => {
 
               {monthlyHasData ? (
                 <div className="grid gap-6 md:grid-cols-[1.2fr_1fr] md:items-center">
-                  <div className="h-72 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                  <div className="w-full min-w-0">
+                    <ResponsiveContainer width="100%" height={288} minWidth={0}>
                       <PieChart>
                         <Pie
                           data={distribution}

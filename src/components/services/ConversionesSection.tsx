@@ -24,9 +24,6 @@ export const ConversionesSection = () => (
     <section className="mt-10">
       <div className="mb-4 flex items-end justify-between gap-4">
         <h2 className="text-xl font-semibold">Cotizaciones del día</h2>
-        <span className="text-xs text-slate-500">
-          Fuente: base de datos LatamPay
-        </span>
       </div>
 
       <LiveRatesGrid pairs={QUOTE_PAIRS} variant="detailed" showFooter />
