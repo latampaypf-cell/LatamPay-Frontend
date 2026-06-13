@@ -299,9 +299,6 @@ export const Dashboard = () => {
         >
           <div className="mb-4 flex items-end justify-between">
             <h2 className="text-xl font-semibold">Cotizaciones en vivo</h2>
-            <p className="text-xs text-slate-400">
-              Datos sincronizados desde el backend.
-            </p>
           </div>
           <LiveRatesGrid variant="detailed" />
         </motion.section>
