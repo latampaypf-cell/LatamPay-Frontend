@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   ChevronRight,
-  CreditCard,
   History,
   Info,
   User,
@@ -13,11 +12,10 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useWallet } from "../../context/WalletContext";
 import { TransactionsExplorer } from "../../components/transactions/TransactionsExplorer";
-import { AliasCbuPanel } from "../../components/receiveModal/AliasCbuPanel";
 
-type Section = "profile" | "history" | "about";
+type Section = "history" | "about";
 
-const VALID_SECTIONS: Section[] = ["profile", "history", "about"];
+const VALID_SECTIONS: Section[] = ["history", "about"];
 
 const parseSection = (value: string | null): Section | null =>
   value && (VALID_SECTIONS as string[]).includes(value) ? (value as Section) : null;
@@ -27,7 +25,6 @@ const sidebarLinks: {
   label: string;
   icon: typeof User;
 }[] = [
-  { id: "profile", label: "CBU/Alias", icon: CreditCard },
   { id: "history", label: "Historial", icon: History },
   { id: "about", label: "Acerca de LatamPay", icon: Info },
 ];
@@ -37,22 +34,22 @@ const isDesktop = () =>
 
 export const More = () => {
   const { user } = useAuth();
-  const { transactions, cbu, alias } = useWallet();
+  const { transactions } = useWallet();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // null = vista de menú (solo mobile). En desktop siempre hay sección activa.
-  // Prioridad inicial: ?section=... > default desktop ("profile") > null en mobile.
+  // Prioridad inicial: ?section=... > default desktop ("history") > null en mobile.
   const [section, setSection] = useState<Section | null>(() => {
     const fromUrl = parseSection(searchParams.get("section"));
     if (fromUrl) return fromUrl;
-    return isDesktop() ? "profile" : null;
+    return isDesktop() ? "history" : null;
   });
 
   // Si el viewport cambia a desktop y no hay sección, seleccionamos la primera.
   useEffect(() => {
     const mql = window.matchMedia("(min-width: 768px)");
     const onChange = () => {
-      if (mql.matches && section === null) setSection("profile");
+      if (mql.matches && section === null) setSection("history");
     };
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
@@ -174,34 +171,6 @@ export const More = () => {
                 <ArrowLeft size={18} />
                 Volver al menú
               </button>
-            )}
-
-            {section === "profile" && (
-              <motion.div
-                key="profile"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 md:h-16 md:w-16">
-                    <CreditCard
-                      size={28}
-                      className="text-cyan-400 md:h-8 md:w-8"
-                    />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold md:text-2xl">CBU / Alias</h2>
-                    <p className="text-xs text-slate-400 md:text-sm">
-                      Datos de tu cuenta para recibir transferencias
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 md:mt-8">
-                  <AliasCbuPanel alias={alias} cbu={cbu} />
-                </div>
-              </motion.div>
             )}
 
             {section === "history" && (
