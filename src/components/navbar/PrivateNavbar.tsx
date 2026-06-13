@@ -130,17 +130,17 @@ export function PrivateNavbar({
                   <Settings size={16} />
                   Configuración
                 </button>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5 hover:text-red-400"
+                >
+                <LogOut size={16} />
+                  Cerrar sesión
+                </button>
               </div>
             )}
           </div>
-          <button
-            type="button"
-            onClick={logout}
-            className="flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-slate-300 transition-all hover:border-red-500/30 hover:text-red-400"
-          >
-            <LogOut size={16} />
-            Cerrar sesión
-          </button>
         </div>
 
         {/* Mobile toggle */}

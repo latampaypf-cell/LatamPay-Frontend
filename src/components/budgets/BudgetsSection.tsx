@@ -34,14 +34,14 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-2xl font-bold">Presupuestos</h2>
+                <h2 className="text-2xl font-bold">Objetivos</h2>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-medium text-amber-300">
                   <Construction size={12} />
                   Próximamente
                 </span>
               </div>
               <p className="mt-2 max-w-xl text-sm text-slate-400">
-                Vas a poder definir topes mensuales por categoría, hacer
+                Vas a poder definir metas mensuales por categoría, hacer
                 seguimiento de tus gastos y recibir alertas cuando estés cerca
                 del límite.
               </p>
@@ -55,7 +55,7 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
             className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 opacity-60"
           >
             <PlusCircle size={16} />
-            Crear presupuesto
+            Crear objetivo
           </button>
         </div>
 
@@ -75,7 +75,7 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
                 <div className="h-full w-0 bg-violet-500/40" />
               </div>
               <p className="mt-3 text-xs text-slate-500">
-                Sin presupuesto definido
+                Sin objetivo definido
               </p>
             </div>
           ))}
