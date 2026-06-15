@@ -12,4 +12,5 @@ export type AuthAction =
   | { type: "SESSION_RESTORED"; payload: { token: string; user: AuthUser } }
   | { type: "SESSION_FAILED" }
   | { type: "LOGIN_SUCCESS"; payload: { token: string; user: AuthUser } }
+  | { type: "USER_UPDATED"; payload: { user: AuthUser } }
   | { type: "LOGOUT" };

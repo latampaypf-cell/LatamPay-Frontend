@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowLeftRight,
@@ -41,6 +41,7 @@ type QuickAction = {
 };
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const {
     balances,
@@ -56,7 +57,12 @@ export const Dashboard = () => {
   const [isConvertOpen, setIsConvertOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>("ARS");
   const [isDepositing, setIsDepositing] = useState(false);
+  const [walletEverReady, setWalletEverReady] = useState(false);
   const { data, isLoading, isError, refetch } = useDashboardData();
+
+  useEffect(() => {
+    if (!isWalletLoading && !walletError) setWalletEverReady(true);
+  }, [isWalletLoading, walletError]);
 
   const handleMockDeposit = async () => {
     if (isDepositing) return;
@@ -94,10 +100,15 @@ export const Dashboard = () => {
       label: "Convertir",
       onClick: () => setIsConvertOpen(true),
     },
-    { icon: History, label: "Historial" },
+    {
+      icon: History,
+      label: "Historial",
+      onClick: () => navigate(`${paths.more}?section=history`),
+    },
   ];
 
-  if (isLoading || isWalletLoading) return <DashboardSkeleton />;
+  if (isLoading || (isWalletLoading && !walletEverReady))
+    return <DashboardSkeleton />;
 
   if (isError || !data || walletError) {
     return (

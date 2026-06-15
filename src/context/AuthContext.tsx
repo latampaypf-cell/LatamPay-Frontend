@@ -16,6 +16,7 @@ import {
   logoutAction,
   sessionFailed,
   sessionRestored,
+  userUpdated,
 } from "./reducer/auth.actions";
 import type { AuthUser } from "./reducer/auth.types";
 
@@ -29,6 +30,7 @@ export type AuthContextValue = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   verifyPassword: (password: string) => Promise<boolean>;
+  setUser: (user: AuthUser) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -68,6 +70,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     dispatch(logoutAction());
   }, []);
 
+  const setUser = useCallback((user: AuthUser) => {
+    dispatch(userUpdated(user));
+  }, []);
+
   const verifyPassword = useCallback(
     async (password: string): Promise<boolean> => {
       if (!state.user?.email) return false;
@@ -90,8 +96,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       login,
       logout,
       verifyPassword,
+      setUser,
     }),
-    [state, login, logout, verifyPassword],
+    [state, login, logout, verifyPassword, setUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

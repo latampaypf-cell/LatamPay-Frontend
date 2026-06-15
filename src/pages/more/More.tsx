@@ -5,6 +5,7 @@ import { useSectionParam } from "../../hooks/useSectionParam";
 import { MoreSidebar } from "../../components/more/MoreSidebar";
 import { HistorySection } from "../../components/more/HistorySection";
 import { AboutSection } from "../../components/more/AboutSection";
+import { SupportSection } from "../../components/more/SupportSection";
 import { parseSection, sidebarLinks } from "../../components/more/sections";
 
 export const More = () => {
@@ -73,6 +74,7 @@ export const More = () => {
 
             <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl md:p-8">
               {section === "history" && <HistorySection />}
+              {section === "support" && <SupportSection />}
               {section === "about" && <AboutSection />}
 
               {section !== null && activeLink && (
