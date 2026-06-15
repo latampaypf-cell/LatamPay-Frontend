@@ -13,6 +13,7 @@ import logoLatamPay from "../../assets/Logo.svg";
 import { useAuth } from "../../context/AuthContext";
 import { useWallet } from "../../context/WalletContext";
 import { ReceiveModal } from "../receiveModal/ReceiveModal";
+import { SettingsModal } from "../settings/SettingsModal";
 import { paths } from "../../routes/paths";
 import { privateNavItems } from "../../routes/nav";
 import type { NavItem } from "../../routes/nav";
@@ -31,6 +32,7 @@ export function PrivateNavbar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isCbuModalOpen, setIsCbuModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -51,6 +53,12 @@ export function PrivateNavbar({
     setIsUserMenuOpen(false);
     closeMenu();
     setIsCbuModalOpen(true);
+  };
+
+  const openSettingsModal = () => {
+    setIsUserMenuOpen(false);
+    closeMenu();
+    setIsSettingsModalOpen(true);
   };
 
   return (
@@ -124,7 +132,7 @@ export function PrivateNavbar({
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => setIsUserMenuOpen(false)}
+                  onClick={openSettingsModal}
                   className="flex w-full items-center gap-3 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5 hover:text-cyan-400"
                 >
                   <Settings size={16} />
@@ -185,7 +193,7 @@ export function PrivateNavbar({
             </button>
             <button
               type="button"
-              onClick={closeMenu}
+              onClick={openSettingsModal}
               className="flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-slate-300"
             >
               <Settings size={16} />
@@ -210,6 +218,11 @@ export function PrivateNavbar({
         cbu={cbu ?? undefined}
         title="Mi CBU"
         subtitle="Tus datos para recibir transferencias."
+      />
+
+      <SettingsModal
+        open={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
       />
     </nav>
   );

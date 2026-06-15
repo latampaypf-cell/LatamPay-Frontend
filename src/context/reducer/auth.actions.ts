@@ -17,6 +17,11 @@ export const loginSuccess = (token: string, user: AuthUser): AuthAction => ({
   payload: { token, user },
 });
 
+export const userUpdated = (user: AuthUser): AuthAction => ({
+  type: "USER_UPDATED",
+  payload: { user },
+});
+
 export const logoutAction = (): AuthAction => ({
   type: "LOGOUT",
 });
