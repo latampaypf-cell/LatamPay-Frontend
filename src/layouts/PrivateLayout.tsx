@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { PrivateNavbar } from "../components/navbar/PrivateNavbar";
+import { FloatingChatButton } from "../components/chatbot/FloatingChatButton";
 
 export function PrivateLayout() {
   return (
@@ -11,6 +12,8 @@ export function PrivateLayout() {
       <main className="pt-20">
         <Outlet />
       </main>
+
+      <FloatingChatButton />
     </div>
   );
 }

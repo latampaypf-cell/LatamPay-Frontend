@@ -28,6 +28,7 @@ const buildAuth = (overrides: Partial<AuthContextValue>): AuthContextValue => ({
   login: vi.fn(),
   logout: vi.fn(),
   verifyPassword: vi.fn(),
+  setUser: vi.fn(),
   ...overrides,
 });
 

@@ -10,6 +10,12 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
         isLoading: false,
       };
 
+    case "USER_UPDATED":
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+
     case "SESSION_FAILED":
     case "LOGOUT":
       return {

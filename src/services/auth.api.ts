@@ -84,6 +84,38 @@ export async function apiMe(token: string): Promise<ApiUser> {
   return json.user;
 }
 
+export type UpdateProfilePayload = {
+  name?: string;
+  alias?: string;
+  currentPassword?: string;
+  newPassword?: string;
+};
+
+export type UpdatedProfile = ApiUser & {
+  alias?: string | null;
+  cbu?: string | null;
+};
+
+export async function apiUpdateProfile(
+  token: string,
+  payload: UpdateProfilePayload,
+): Promise<UpdatedProfile> {
+  const res = await fetch(`${API_BASE}/api/auth/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  const json = await parseJsonOrThrow<UpdatedProfile>(
+    res,
+    "No pudimos actualizar el perfil.",
+  );
+  if (!json.data) throw new Error("Respuesta inválida del servidor.");
+  return json.data;
+}
+
 
  /* Este ApiMe se agrego para hacer un mock para el login, para que no exista la necesidad de hacer la base de datos local
  export async function apiMe(token: string): Promise<ApiUser> {
