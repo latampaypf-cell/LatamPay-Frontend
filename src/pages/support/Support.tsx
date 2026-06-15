@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Bot,
@@ -5,8 +6,11 @@ import {
   ShieldCheck,
   Clock,
 } from "lucide-react";
+import { ChatBotModal } from "../../components/chatbot/ChatBotModal";
 
 export const Support = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-slate-950 px-6 py-12 text-white">
       {/* Fondo animado */}
@@ -77,7 +81,12 @@ export const Support = () => {
                 plataforma.
               </p>
 
-              <button className="mt-5 rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-slate-950 transition hover:scale-[1.02]">
+              <button
+                type="button"
+                onClick={() => setIsChatOpen(true)}
+                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-slate-950 transition hover:scale-[1.02]"
+              >
+                <Bot size={18} />
                 Iniciar conversación
               </button>
             </div>
@@ -194,6 +203,12 @@ export const Support = () => {
           </div>
         </motion.section>
       </div>
+
+      <ChatBotModal
+        open={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        subtitle="Resolvé tus dudas antes de crear una cuenta."
+      />
     </section>
   );
 };
