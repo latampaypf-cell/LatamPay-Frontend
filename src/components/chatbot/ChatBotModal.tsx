@@ -42,17 +42,14 @@ export const ChatBotModal = ({ open, onClose, subtitle }: ChatBotModalProps) => 
               fixed z-[95]
               inset-0
               flex items-stretch
-              sm:items-center sm:justify-center
+              sm:items-center sm:justify-center sm:p-4
             "
           >
-            <div className="flex w-full sm:max-w-lg sm:p-4">
-              <ChatPanel
-                onClose={onClose}
-                variant="floating"
-                subtitle={subtitle}
-                className="w-full"
-              />
-            </div>
+            <ChatPanel
+              onClose={onClose}
+              subtitle={subtitle}
+              className="h-full w-full !rounded-none sm:h-[80vh] sm:max-h-[640px] sm:max-w-lg sm:!rounded-3xl"
+            />
           </motion.div>
         </>
       )}

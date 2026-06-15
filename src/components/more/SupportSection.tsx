@@ -47,7 +47,7 @@ export const SupportSection = () => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.35 }}
     >
-      <ChatPanel variant="embedded" />
+      <ChatPanel className="h-[560px] w-full md:h-[640px]" />
     </motion.div>
   </div>
 );

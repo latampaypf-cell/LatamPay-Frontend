@@ -16,7 +16,7 @@ export type ChatBotContextValue = {
   isSending: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  sendMessage: (text: string) => Promise<void>;
+  sendMessage: (text: string) => Promise<boolean>;
   reset: () => void;
 };
 
@@ -39,9 +39,9 @@ export function ChatBotProvider({ children }: ChatBotProviderProps) {
   }, [isAuthenticated]);
 
   const sendMessage = useCallback(
-    async (text: string) => {
+    async (text: string): Promise<boolean> => {
       const trimmed = text.trim();
-      if (!trimmed || isSending) return;
+      if (!trimmed || isSending) return false;
 
       setError(null);
       const optimisticUserMsg: ChatMessage = { role: "user", text: trimmed };
@@ -55,6 +55,7 @@ export function ChatBotProvider({ children }: ChatBotProviderProps) {
           ? await apiUserChat(payload)
           : await apiPublicChat(payload);
         setMessages(updatedHistory);
+        return true;
       } catch (e) {
         const message =
           e instanceof Error
@@ -63,6 +64,7 @@ export function ChatBotProvider({ children }: ChatBotProviderProps) {
         setError(message);
         // Revertimos el mensaje optimista para evitar conversación rota.
         setMessages(baseHistory);
+        return false;
       } finally {
         setIsSending(false);
       }

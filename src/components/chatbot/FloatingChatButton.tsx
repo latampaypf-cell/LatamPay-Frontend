@@ -66,17 +66,14 @@ export const FloatingChatButton = () => {
               className="
                 fixed inset-0
                 sm:static sm:inset-auto
-                sm:w-[400px]
+                sm:h-[560px] sm:w-[400px]
                 origin-bottom-right
               "
             >
-              <div className="flex h-full w-full p-3 sm:p-0">
-                <ChatPanel
-                  onClose={close}
-                  variant="floating"
-                  className="w-full"
-                />
-              </div>
+              <ChatPanel
+                onClose={close}
+                className="h-full w-full !rounded-none sm:!rounded-3xl"
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -92,7 +89,9 @@ export const FloatingChatButton = () => {
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.94 }}
           transition={{ type: "spring", stiffness: 320, damping: 18 }}
-          className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 text-slate-950 shadow-[0_8px_30px_rgba(6,182,212,0.45)] ring-2 ring-cyan-300/40 transition hover:shadow-[0_10px_40px_rgba(6,182,212,0.55)]"
+          className={`group relative h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 text-slate-950 shadow-[0_8px_30px_rgba(6,182,212,0.45)] ring-2 ring-cyan-300/40 transition hover:shadow-[0_10px_40px_rgba(6,182,212,0.55)] ${
+            isOpen ? "hidden sm:flex" : "flex"
+          }`}
         >
           {/* Halo pulsante */}
           <span className="pointer-events-none absolute inset-0 rounded-full">

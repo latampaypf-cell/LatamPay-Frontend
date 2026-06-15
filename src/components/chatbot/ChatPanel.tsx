@@ -34,16 +34,14 @@ const SUGGESTIONS_PRIVATE = [
 export type ChatPanelProps = {
   /** Si se renderiza dentro de un popup/modal, muestra el botón de cerrar. */
   onClose?: () => void;
-  /** Estilo del contenedor. `embedded` = sin altura fija, `floating` = panel con altura propia. */
-  variant?: "embedded" | "floating";
   /** Texto opcional bajo el título. */
   subtitle?: string;
+  /** El padre controla la altura/ancho. Pasá clases Tailwind acá. */
   className?: string;
 };
 
 export const ChatPanel = ({
   onClose,
-  variant = "floating",
   subtitle,
   className = "",
 }: ChatPanelProps) => {
@@ -70,15 +68,23 @@ export const ChatPanel = ({
     inputRef.current?.focus();
   }, []);
 
-  const handleSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!input.trim() || isSending) return;
-      const text = input;
+  const send = useCallback(
+    async (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed || isSending) return;
       setInput("");
-      await sendMessage(text);
+      const ok = await sendMessage(trimmed);
+      if (!ok) setInput(text);
     },
-    [input, isSending, sendMessage],
+    [isSending, sendMessage],
+  );
+
+  const handleSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      void send(input);
+    },
+    [input, send],
   );
 
   const handleSuggestion = (text: string) => {
@@ -90,14 +96,9 @@ export const ChatPanel = ({
     ? SUGGESTIONS_PRIVATE
     : SUGGESTIONS_PUBLIC;
 
-  const containerHeight =
-    variant === "floating"
-      ? "h-[80vh] max-h-[640px] sm:h-[560px]"
-      : "h-[560px] md:h-[640px]";
-
   return (
     <div
-      className={`flex flex-col overflow-hidden rounded-3xl border border-cyan-500/20 bg-slate-950/95 shadow-[0_0_50px_rgba(6,182,212,0.18)] backdrop-blur-xl ${containerHeight} ${className}`}
+      className={`flex flex-col overflow-hidden rounded-3xl border border-cyan-500/20 bg-slate-950/95 shadow-[0_0_50px_rgba(6,182,212,0.18)] backdrop-blur-xl ${className}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-violet-500/10 px-5 py-4">
@@ -206,11 +207,7 @@ export const ChatPanel = ({
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                if (input.trim() && !isSending) {
-                  const text = input;
-                  setInput("");
-                  void sendMessage(text);
-                }
+                void send(input);
               }
             }}
             rows={1}
