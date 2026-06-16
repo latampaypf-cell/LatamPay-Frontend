@@ -80,7 +80,9 @@ export function WalletProvider({ children }: WalletProviderProps) {
       const [wallet, history, ratesResponse] = await Promise.all([
         apiGetWallet(),
         apiGetHistory(1, 50),
-        apiGetRates().catch(() => [] as Awaited<ReturnType<typeof apiGetRates>>),
+        apiGetRates().catch(
+          () => [] as Awaited<ReturnType<typeof apiGetRates>>,
+        ),
       ]);
       const balances: CurrencyBalances = { ...EMPTY_BALANCES };
       if (wallet && Array.isArray(wallet.balances)) {
@@ -209,11 +211,13 @@ export function WalletProvider({ children }: WalletProviderProps) {
           to_currency: input.to,
           amount: input.amount,
         });
+        console.log("Swap result:", result);
         await refresh();
+
         return {
           ok: true,
-          toAmount: Number(result.toAmount),
-          rate: Number(result.rate),
+          toAmount: Number(result.to_amount),
+          rate: Number(result.exchange_rate),
         };
       } catch (e) {
         const message =
