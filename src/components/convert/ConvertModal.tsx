@@ -41,7 +41,7 @@ export const ConvertModal = ({
   onClose,
   initialFrom = "ARS",
 }: ConvertModalProps) => {
-  const { balances, getRate, swap } = useWallet();
+  const { balances, getRate, swap  } = useWallet();
   const [step, setStep] = useState<Step>("form");
   const [from, setFrom] = useState<Currency>(initialFrom);
   const [to, setTo] = useState<Currency>(
@@ -50,8 +50,8 @@ export const ConvertModal = ({
   const [amount, setAmount] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState<SuccessData | null>(null);
-
   useEffect(() => {
+    console.log(from, to, step, balances)
     if (open) {
       setStep("form");
       setFrom(initialFrom);
