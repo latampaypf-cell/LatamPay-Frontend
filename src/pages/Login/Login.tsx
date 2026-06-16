@@ -130,6 +130,14 @@ export const Login = () => {
                 </p>
               )}
             </div>
+            <div className="mt-2 text-right">
+  <Link
+    to={paths.forgotPassword}
+    className="text-sm text-cyan-400 hover:text-cyan-300"
+  >
+    ¿Olvidaste tu contraseña?
+  </Link>
+</div>
 
             {/* SUBMIT */}
             <button
