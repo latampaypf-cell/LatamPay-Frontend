@@ -40,7 +40,7 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
                   Próximamente
                 </span>
               </div>
-              <p className="mt-2 max-w-xl text-sm text-slate-400">
+              <p className="mt-2 max-w-xl text-sm text-slate-200">
                 Vas a poder definir metas mensuales por categoría, hacer
                 seguimiento de tus gastos y recibir alertas cuando estés cerca
                 del límite.
@@ -52,7 +52,7 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
             type="button"
             disabled
             aria-disabled
-            className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 opacity-60"
+            className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-violet-500/40 bg-violet-500/15 px-4 py-2 text-sm font-medium text-violet-100 opacity-90"
           >
             <PlusCircle size={16} />
             Crear objetivo
@@ -66,15 +66,15 @@ export const BudgetsSection = ({ className = "" }: BudgetsSectionProps) => {
               key={label}
               className="rounded-2xl border border-white/10 bg-slate-900/40 p-5"
             >
-              <div className="flex items-center gap-2 text-slate-400">
-                <Icon size={16} />
-                <span className="text-sm">{label}</span>
+              <div className="flex items-center gap-2 text-slate-100">
+                <Icon size={16} className="text-violet-300" />
+                <span className="text-sm font-medium">{label}</span>
               </div>
-              <p className="mt-3 text-2xl font-bold text-slate-500">— / —</p>
-              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+              <p className="mt-3 text-2xl font-bold text-slate-200">— / —</p>
+              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                 <div className="h-full w-0 bg-violet-500/40" />
               </div>
-              <p className="mt-3 text-xs text-slate-500">
+              <p className="mt-3 text-xs text-slate-300">
                 Sin objetivo definido
               </p>
             </div>
