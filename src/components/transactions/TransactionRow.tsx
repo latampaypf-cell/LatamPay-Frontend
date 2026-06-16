@@ -119,8 +119,8 @@ export const TransactionRow = ({
 
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className="flex items-center justify-between gap-3 px-5 py-5">
-        <div className="min-w-0">
+      <div className="flex items-center justify-between gap-2 px-4 py-4 sm:gap-3 sm:px-5 sm:py-5">
+        <div className="min-w-0 flex-1">
           <p className="truncate">
             <span>{title}</span>
             {counterpartyName && (
@@ -135,8 +135,8 @@ export const TransactionRow = ({
           {date && <p className="mt-0.5 text-xs text-slate-500">{date}</p>}
         </div>
 
-        <div className="flex shrink-0 items-center gap-3">
-          <span className={`font-semibold ${colorClass}`}>
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <span className={`whitespace-nowrap text-sm font-semibold sm:text-base ${colorClass}`}>
             {sign}
             {currencySymbol}
             {formatted}
