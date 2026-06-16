@@ -211,7 +211,6 @@ export function WalletProvider({ children }: WalletProviderProps) {
           to_currency: input.to,
           amount: input.amount,
         });
-        console.log("Swap result:", result);
         await refresh();
 
         return {
