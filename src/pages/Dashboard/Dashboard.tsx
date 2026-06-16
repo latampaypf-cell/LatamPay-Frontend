@@ -324,7 +324,7 @@ export const Dashboard = () => {
           <div className="mb-4 flex items-end justify-between">
             <h2 className="text-xl font-semibold">Últimos movimientos</h2>
             <p className="text-xs text-slate-400">
-              Mostrando los 5 más recientes.
+              Mostrando los más recientes.
             </p>
           </div>
 

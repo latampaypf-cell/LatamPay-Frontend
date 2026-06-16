@@ -16,37 +16,50 @@ import { PublicRoute } from "./guards/PublicRoute";
 import { paths } from "./paths";
 import { Support } from "../pages/support/Support";
 import { PublicLayout } from "../layouts/PublicLayaout";
+import { ForgotPassword } from "../pages/ForgotPassword/ForgotPassword";
+import { VerifyCode } from "../pages/ForgotPassword/VerifyCode";
+import { ResetPassword } from "../pages/ForgotPassword/ResetPassword";
 
 export function AppRouter() {
   return (
     <AuthProvider>
       <WalletProvider>
-      <ChatBotProvider>
-      <BrowserRouter>
-        <Routes>
+        <ChatBotProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<PublicRoute />}>
+                <Route element={<PublicLayout />}>
+                  <Route path={paths.home} element={<Home />} />
+                  <Route path={paths.login} element={<Login />} />
+                  <Route path={paths.register} element={<Register />} />
+                  <Route path={paths.support} element={<Support />} />
+                  <Route
+                    path={paths.forgotPassword}
+                    element={<ForgotPassword />}
+                  />
 
-          <Route element={<PublicRoute />}>
-           <Route element={<PublicLayout />}>
-          <Route path={paths.home} element={<Home />} />
-            <Route path={paths.login} element={<Login />} />
-            <Route path={paths.register} element={<Register />} />
-            <Route path={paths.support} element={<Support />} />
-          </Route>
-           </Route>
+                  <Route path={paths.verifyCode} element={<VerifyCode />} />
 
-          <Route element={<PrivateRoute />}>
-            <Route element={<PrivateLayout />}>
-              <Route path={paths.dashboard} element={<Dashboard />} />
-              <Route path={paths.services} element={<Services />} />
-              <Route path={paths.analytics} element={<Analytics />} />
-              <Route path={paths.more} element={<More />} />
-            </Route>
-          </Route>
+                  <Route
+                    path={paths.resetPassword}
+                    element={<ResetPassword />}
+                  />
+                </Route>
+              </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      </ChatBotProvider>
+              <Route element={<PrivateRoute />}>
+                <Route element={<PrivateLayout />}>
+                  <Route path={paths.dashboard} element={<Dashboard />} />
+                  <Route path={paths.services} element={<Services />} />
+                  <Route path={paths.analytics} element={<Analytics />} />
+                  <Route path={paths.more} element={<More />} />
+                </Route>
+              </Route>
+
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </ChatBotProvider>
       </WalletProvider>
     </AuthProvider>
   );
