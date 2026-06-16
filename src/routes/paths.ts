@@ -1,7 +1,13 @@
 export const paths = {
-  home: "/",
+ home: "/",
   login: "/login",
   register: "/register",
+
+
+  forgotPassword: "/forgot-password",
+  verifyCode: "/verify-code",
+  resetPassword: "/reset-password",
+
   support: "/support",
   dashboard: "/dashboard",
   services: "/services",
