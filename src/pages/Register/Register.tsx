@@ -8,6 +8,7 @@ import {
   Zap,
   Eye,
   EyeOff,
+  TriangleAlert,
 } from "lucide-react";
 
 import { useForm } from "react-hook-form";
@@ -31,10 +32,13 @@ export const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -42,9 +46,21 @@ export const Register = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    await apiRegister(data.name, data.email, data.password);
-
-    navigate(paths.login, { replace: true });
+    setServerError(null);
+    clearErrors("email");
+    try {
+      await apiRegister(data.name, data.email, data.password);
+      navigate(paths.login, { replace: true });
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "No pudimos crear la cuenta.";
+      const isEmailRelated = /email|correo|registrad/i.test(message);
+      if (isEmailRelated) {
+        setError("email", { type: "server", message });
+      } else {
+        setServerError(message);
+      }
+    }
   };
 
   return (
@@ -222,6 +238,16 @@ export const Register = () => {
                 </p>
               )}
             </div>
+
+            {serverError && (
+              <div
+                role="alert"
+                className="mt-5 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+              >
+                <TriangleAlert size={16} className="mt-0.5 shrink-0" />
+                <p>{serverError}</p>
+              </div>
+            )}
 
             <button
               disabled={isSubmitting}
