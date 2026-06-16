@@ -51,7 +51,6 @@ export const ConvertModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState<SuccessData | null>(null);
   useEffect(() => {
-    console.log(from, to, step, balances)
     if (open) {
       setStep("form");
       setFrom(initialFrom);

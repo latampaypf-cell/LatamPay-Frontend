@@ -27,8 +27,17 @@ export type TransferModalProps = {
 
 export const TransferModal = ({ open, onClose }: TransferModalProps) => {
   const { user, verifyPassword } = useAuth();
-  const { balances, canAfford, transfer } = useWallet();
+  const { balances, canAfford, transfer, alias, cbu } = useWallet();
   const [state, dispatch] = useReducer(transferReducer, initialTransferState);
+
+  const normalizedDestination = state.destination.trim().toLowerCase();
+  const isSelfTransfer =
+    normalizedDestination.length > 0 &&
+    ((alias && normalizedDestination === alias.toLowerCase()) ||
+      (cbu && normalizedDestination === cbu.toLowerCase()));
+  const destinationError = isSelfTransfer
+    ? "No te podés transferir a vos mismo."
+    : undefined;
 
   // Reset al abrir
   useEffect(() => {
@@ -40,6 +49,10 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSelfTransfer) {
+      toast.error("No te podés transferir a vos mismo.");
+      return;
+    }
     const result = validateDraft({
       destination: state.destination,
       amount: state.amount,
@@ -123,6 +136,7 @@ export const TransferModal = ({ open, onClose }: TransferModalProps) => {
           currency={state.currency}
           reason={state.reason}
           description={state.description}
+          destinationError={destinationError}
           onChange={(patch) =>
             dispatch({ type: "UPDATE_FORM", payload: patch })
           }

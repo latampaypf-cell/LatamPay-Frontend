@@ -17,6 +17,7 @@ export type FormStepProps = {
   currency: Currency;
   reason: TransferReason;
   description: string;
+  destinationError?: string;
   onChange: (patch: Partial<TransferFormFields>) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
@@ -27,6 +28,7 @@ export const FormStep = ({
   currency,
   reason,
   description,
+  destinationError,
   onChange,
   onSubmit,
 }: FormStepProps) => (
@@ -45,6 +47,7 @@ export const FormStep = ({
         onChange={(e) => onChange({ destination: e.target.value })}
         placeholder="Ingresá el CBU o alias del destinatario"
         leftIcon={User}
+        error={destinationError}
       />
 
       <Input
@@ -120,7 +123,13 @@ export const FormStep = ({
         hint={`${description.length}/${DESCRIPTION_MAX_LENGTH} caracteres`}
       />
 
-      <Button type="submit" leftIcon={Send} fullWidth className="mt-2">
+      <Button
+        type="submit"
+        leftIcon={Send}
+        fullWidth
+        className="mt-2"
+        disabled={Boolean(destinationError)}
+      >
         Enviar
       </Button>
     </form>
