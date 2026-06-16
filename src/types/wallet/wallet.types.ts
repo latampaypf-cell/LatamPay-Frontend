@@ -87,10 +87,25 @@ export type SwapPayload = {
 };
 
 export type SwapResult = {
-  transactionId: string;
-  fromAmount: number;
-  toAmount: number;
-  rate: number;
+  id: string;
+  type: string;
+  status: string;
+  from_currency: Currency;
+  to_currency: Currency;
+  from_amount: string;
+  to_amount: string;
+  fee: string;
+  exchange_rate: string;
+  description: string;
+  created_at: string;
+  from_name: string;
+  from_alias: string;
+  from_cbu: string;
+  from_wallet_id: string;
+  to_name: string;
+  to_alias: string;
+  to_cbu: string;
+  to_wallet_id: string;
 };
 
 export type SwapInput = {
