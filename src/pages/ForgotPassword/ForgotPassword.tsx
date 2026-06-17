@@ -27,11 +27,9 @@ export const ForgotPassword = () => {
     try {
       const result = await sendRecoveryCode(trimmed);
       toast.success(`Código enviado a ${result.maskedEmail}.`);
-      if (import.meta.env.DEV) {
-        toast.message(`Modo demo — código: ${result.code}`, {
-          duration: 8000,
-        });
-      }
+      toast.message(`Modo demo — código: ${result.code}`, {
+        duration: 8000,
+      });
       navigate(paths.verifyCode);
     } catch (err) {
       const message =
