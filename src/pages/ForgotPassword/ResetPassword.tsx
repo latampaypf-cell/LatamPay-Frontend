@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { paths } from "../../routes/paths";
+import {
+  clearRecoveryState,
+  isCodeVerified,
+} from "../../services/sesMock";
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
@@ -11,35 +15,32 @@ export const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  useEffect(() => {
+    if (!isCodeVerified()) {
+      toast.error("Verificá el código antes de cambiar la contraseña.");
+      navigate(paths.forgotPassword, { replace: true });
+    }
+  }, [navigate]);
+
   const handleReset = () => {
-    // Validar campos vacíos
     if (!password.trim() || !confirmPassword.trim()) {
       toast.warning("Debes completar todos los campos.");
       return;
     }
 
-    // Validar longitud mínima
     if (password.length < 8) {
-      toast.warning(
-        "La contraseña debe tener al menos 8 caracteres."
-      );
+      toast.warning("La contraseña debe tener al menos 8 caracteres.");
       return;
     }
 
-    // Validar coincidencia
     if (password !== confirmPassword) {
       toast.error("Las contraseñas no coinciden.");
       return;
     }
 
-    // Simulación de actualización exitosa
     toast.success("Contraseña actualizada correctamente.");
+    clearRecoveryState();
 
-    // Limpiar datos temporales
-    sessionStorage.removeItem("recoveryCode");
-    sessionStorage.removeItem("recoveryEmail");
-
-    // Redireccionar al login
     setTimeout(() => {
       navigate(paths.login);
     }, 1500);
@@ -59,8 +60,7 @@ export const ResetPassword = () => {
           </h1>
 
           <p className="mt-2 text-slate-400">
-            Elegí una contraseña segura para proteger
-            tu cuenta.
+            Elegí una contraseña segura para proteger tu cuenta.
           </p>
         </div>
 
@@ -70,9 +70,7 @@ export const ResetPassword = () => {
               type="password"
               placeholder="Nueva contraseña"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
             />
           </div>
@@ -82,9 +80,10 @@ export const ResetPassword = () => {
               type="password"
               placeholder="Confirmar contraseña"
               value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleReset();
+              }}
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
             />
           </div>
