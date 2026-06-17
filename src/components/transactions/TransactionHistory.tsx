@@ -1,6 +1,6 @@
 import { Inbox } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { Transaction } from "../../context/WalletContext";
+import type { Transaction } from "../../context/wallet";
 import { EmptyState } from "../ui/EmptyState";
 import { TransactionRow } from "./TransactionRow";
 

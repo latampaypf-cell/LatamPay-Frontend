@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { History } from "lucide-react";
-import { useWallet } from "../../context/WalletContext";
+import { useWallet } from "../../context/wallet";
 import { TransactionsExplorer } from "../transactions/TransactionsExplorer";
 
 export const HistorySection = () => {

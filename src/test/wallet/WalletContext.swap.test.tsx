@@ -1,13 +1,16 @@
 import { act, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { WalletProvider, useWallet } from "../../context/WalletContext";
+import { WalletProvider, useWallet } from "../../context/wallet";
 import type {
   ApiWallet,
   ApiHistory,
   ApiExchangeRate,
   SwapResult,
+  WalletContextValue,
 } from "../../types/wallet/wallet.types";
+
+type SwapOutcome = Awaited<ReturnType<WalletContextValue["swap"]>>;
 
 const mocks = vi.hoisted(() => ({
   apiGetWallet: vi.fn(),
@@ -114,7 +117,7 @@ afterEach(() => {
 describe("WalletContext.swap — validaciones", () => {
   it("rechaza monto <= 0", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({ from: "ARS", to: "COP", amount: 0 });
     });
@@ -125,7 +128,7 @@ describe("WalletContext.swap — validaciones", () => {
 
   it("rechaza misma moneda en from y to", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({ from: "ARS", to: "ARS", amount: 10 });
     });
@@ -139,7 +142,7 @@ describe("WalletContext.swap — validaciones", () => {
 
   it("rechaza moneda no soportada", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,7 +158,7 @@ describe("WalletContext.swap — validaciones", () => {
 
   it("rechaza si el monto excede el saldo de origen", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({
         from: "ARS",
@@ -185,7 +188,7 @@ describe("WalletContext.swap — éxito", () => {
       ],
     });
 
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({
         from: "ARS",
@@ -215,7 +218,7 @@ describe("WalletContext.swap — errores de API", () => {
     await setup();
     mocks.apiSwap.mockRejectedValueOnce(new Error("Tasa no disponible"));
 
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({
         from: "ARS",
@@ -232,7 +235,7 @@ describe("WalletContext.swap — errores de API", () => {
     await setup();
     mocks.apiSwap.mockRejectedValueOnce("boom");
 
-    let result!: Awaited<ReturnType<typeof captured.swap>>;
+    let result!: SwapOutcome;
     await act(async () => {
       result = await captured!.swap({
         from: "ARS",

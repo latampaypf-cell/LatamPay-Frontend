@@ -1,13 +1,16 @@
 import { act, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { WalletProvider, useWallet } from "../../context/WalletContext";
+import { WalletProvider, useWallet } from "../../context/wallet";
 import type {
   ApiWallet,
   ApiHistory,
   ApiExchangeRate,
   TransferResult,
+  WalletContextValue,
 } from "../../types/wallet/wallet.types";
+
+type TransferOutcome = Awaited<ReturnType<WalletContextValue["transfer"]>>;
 
 const mocks = vi.hoisted(() => ({
   apiGetWallet: vi.fn(),
@@ -92,7 +95,7 @@ afterEach(() => {
 describe("WalletContext.transfer — validaciones", () => {
   it("rechaza monto <= 0", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 0,
@@ -107,7 +110,7 @@ describe("WalletContext.transfer — validaciones", () => {
 
   it("rechaza monto no numérico", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: Number.NaN,
@@ -122,7 +125,7 @@ describe("WalletContext.transfer — validaciones", () => {
 
   it("rechaza moneda no soportada", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 10,
@@ -138,7 +141,7 @@ describe("WalletContext.transfer — validaciones", () => {
 
   it("rechaza si el monto supera el saldo disponible", async () => {
     await setup();
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 5000,
@@ -173,7 +176,7 @@ describe("WalletContext.transfer — éxito", () => {
       ],
     });
 
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 100,
@@ -226,7 +229,7 @@ describe("WalletContext.transfer — errores de API", () => {
     await setup();
     mocks.apiTransfer.mockRejectedValueOnce(new Error("Destino inválido"));
 
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 10,
@@ -244,7 +247,7 @@ describe("WalletContext.transfer — errores de API", () => {
     await setup();
     mocks.apiTransfer.mockRejectedValueOnce("boom");
 
-    let result!: Awaited<ReturnType<typeof captured.transfer>>;
+    let result!: TransferOutcome;
     await act(async () => {
       result = await captured!.transfer({
         amount: 10,
