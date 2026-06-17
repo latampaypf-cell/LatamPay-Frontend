@@ -72,11 +72,9 @@ export const sendRecoveryCode = async (
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   sessionStorage.removeItem(VERIFIED_KEY);
 
-  if (import.meta.env.DEV) {
-    console.info(
-      `[SES MOCK] Código de recuperación para ${normalized}: ${code} (vence en 5 min)`,
-    );
-  }
+  console.info(
+    `[SES MOCK] Código de recuperación para ${normalized}: ${code} (vence en 5 min)`,
+  );
 
   return {
     email: normalized,
