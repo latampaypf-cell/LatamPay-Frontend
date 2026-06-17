@@ -59,6 +59,9 @@ export const mapTransaction = (t: ApiTransaction): Transaction => {
   const currency =
     currencyCode && isCurrency(currencyCode) ? currencyCode : undefined;
 
+  const rawRate = Number(t.exchange_rate ?? NaN);
+  const exchangeRate = Number.isFinite(rawRate) && rawRate > 0 ? rawRate : undefined;
+
   return {
     id: t.id,
     title,
@@ -71,5 +74,10 @@ export const mapTransaction = (t: ApiTransaction): Transaction => {
     counterpartyCbu,
     currency,
     direction: t.direction,
+    exchangeRate,
+    fromCurrency: t.from_currency ?? undefined,
+    toCurrency: t.to_currency ?? undefined,
+    fromAmount: Number.isFinite(fromAmount) ? fromAmount : undefined,
+    toAmount: Number.isFinite(toAmount) ? toAmount : undefined,
   };
 };

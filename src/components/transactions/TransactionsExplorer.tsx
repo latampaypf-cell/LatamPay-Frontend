@@ -3,7 +3,12 @@ import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import type { Transaction } from "../../types/wallet/wallet.types";
 import { TransactionHistory } from "./TransactionHistory";
 
-type ActionFilter = "all" | "transfer_sent" | "deposit" | "swap";
+type ActionFilter =
+  | "all"
+  | "transfer_sent"
+  | "transfer_received"
+  | "deposit"
+  | "swap";
 type DateFilter = "all" | "today" | "week" | "month";
 type AmountFilter = "all" | "low" | "mid" | "high";
 
@@ -12,6 +17,7 @@ const PAGE_SIZE = 10;
 const actionOptions: { value: ActionFilter; label: string }[] = [
   { value: "all", label: "Todas las acciones" },
   { value: "transfer_sent", label: "Transferencias enviadas" },
+  { value: "transfer_received", label: "Transferencias recibidas" },
   { value: "deposit", label: "Depósitos" },
   { value: "swap", label: "Conversiones" },
 ];

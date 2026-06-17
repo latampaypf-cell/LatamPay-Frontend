@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import { Modal } from "../ui/Modal";
 import { Button } from "../button/Button";
-import { useWallet } from "../../context/WalletContext";
+import { useWallet } from "../../context/wallet";
 import {
   SUPPORTED_CURRENCIES,
   type Currency,

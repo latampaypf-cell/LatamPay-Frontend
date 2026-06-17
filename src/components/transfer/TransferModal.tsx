@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { toast } from "sonner";
 import { Modal } from "../ui/Modal";
 import { useAuth } from "../../context/AuthContext";
-import { useWallet } from "../../context/WalletContext";
+import { useWallet } from "../../context/wallet";
 import {
   initialTransferState,
   transferReducer,

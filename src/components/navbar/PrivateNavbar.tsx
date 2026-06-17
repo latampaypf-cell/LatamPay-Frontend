@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import logoLatamPay from "../../assets/Logo.svg";
 import { useAuth } from "../../context/AuthContext";
-import { useWallet } from "../../context/WalletContext";
+import { useWallet } from "../../context/wallet";
 import { ReceiveModal } from "../receiveModal/ReceiveModal";
 import { SettingsModal } from "../settings/SettingsModal";
 import { paths } from "../../routes/paths";
