@@ -79,11 +79,9 @@ export const VerifyCode = () => {
       setExpiresAt(result.expiresAt);
       setCode("");
       toast.success(`Nuevo código enviado a ${result.maskedEmail}.`);
-      if (import.meta.env.DEV) {
-        toast.message(`Modo demo — código: ${result.code}`, {
-          duration: 8000,
-        });
-      }
+      toast.message(`Modo demo — código: ${result.code}`, {
+        duration: 8000,
+      });
     } catch (err) {
       const message =
         err instanceof Error
