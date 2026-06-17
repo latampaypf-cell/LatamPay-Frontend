@@ -157,6 +157,11 @@ export type Transaction = {
   counterpartyCbu?: string;
   currency?: Currency;
   direction: ApiTransactionDirection;
+  exchangeRate?: number;
+  fromCurrency?: string;
+  toCurrency?: string;
+  fromAmount?: number;
+  toAmount?: number;
 };
 
 export type TransferInput = {

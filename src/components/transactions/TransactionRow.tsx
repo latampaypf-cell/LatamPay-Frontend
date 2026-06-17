@@ -105,7 +105,29 @@ export const TransactionRow = ({
     counterpartyName,
     counterpartyCbu,
     createdAt,
+    exchangeRate,
+    fromCurrency,
+    toCurrency,
+    fromAmount,
+    toAmount,
   } = transaction;
+
+  const isSwap = kind === "swap";
+  const rateLabel =
+    isSwap && exchangeRate && fromCurrency && toCurrency
+      ? `1 ${fromCurrency} = ${exchangeRate.toLocaleString("es-AR", {
+          maximumFractionDigits: 6,
+        })} ${toCurrency}`
+      : "—";
+
+  const sentLabel =
+    isSwap && typeof fromAmount === "number" && fromCurrency
+      ? `${formatAmount(fromAmount.toString())} ${fromCurrency}`
+      : "—";
+  const receivedLabel =
+    isSwap && typeof toAmount === "number" && toCurrency
+      ? `${formatAmount(toAmount.toString())} ${toCurrency}`
+      : "—";
 
   const isCredit = amount >= 0;
   const sign = isCredit ? "+" : "-";
@@ -186,12 +208,22 @@ export const TransactionRow = ({
               <DetailRow label="Tipo" value={TYPE_LABEL[kind]} />
               <DetailRow label="Estado" value={statusMeta.label} />
               <DetailRow label="Fecha" value={formatFullDate(createdAt)} />
-              <DetailRow label="Origen" value={counterpartyName ?? "—"} />
-              <DetailRow
-                label="CBU"
-                value={counterpartyCbu ?? "—"}
-                mono={!!counterpartyCbu}
-              />
+              {isSwap ? (
+                <>
+                  <DetailRow label="Monto convertido" value={sentLabel} />
+                  <DetailRow label="Monto recibido" value={receivedLabel} />
+                  <DetailRow label="Tasa del día" value={rateLabel} mono />
+                </>
+              ) : (
+                <>
+                  <DetailRow label="Origen" value={counterpartyName ?? "—"} />
+                  <DetailRow
+                    label="CBU"
+                    value={counterpartyCbu ?? "—"}
+                    mono={!!counterpartyCbu}
+                  />
+                </>
+              )}
               <DetailRow label="Descripción" value={description?.trim() || "—"} />
             </div>
           </motion.div>

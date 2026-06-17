@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { Input } from "../input/Input";
 import { Button } from "../button/Button";
 import { useAuth } from "../../context/AuthContext";
-import { useWallet } from "../../context/WalletContext";
+import { useWallet } from "../../context/wallet";
 import {
   passwordSchema,
   profileSchema,
