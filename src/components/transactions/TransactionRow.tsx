@@ -105,7 +105,18 @@ export const TransactionRow = ({
     counterpartyName,
     counterpartyCbu,
     createdAt,
+    exchangeRate,
+    fromCurrency,
+    toCurrency,
   } = transaction;
+
+  const isSwap = kind === "swap";
+  const rateLabel =
+    isSwap && exchangeRate && fromCurrency && toCurrency
+      ? `1 ${fromCurrency} = ${exchangeRate.toLocaleString("es-AR", {
+          maximumFractionDigits: 6,
+        })} ${toCurrency}`
+      : "—";
 
   const isCredit = amount >= 0;
   const sign = isCredit ? "+" : "-";
@@ -187,11 +198,15 @@ export const TransactionRow = ({
               <DetailRow label="Estado" value={statusMeta.label} />
               <DetailRow label="Fecha" value={formatFullDate(createdAt)} />
               <DetailRow label="Origen" value={counterpartyName ?? "—"} />
-              <DetailRow
-                label="CBU"
-                value={counterpartyCbu ?? "—"}
-                mono={!!counterpartyCbu}
-              />
+              {isSwap ? (
+                <DetailRow label="Tasa del día" value={rateLabel} mono />
+              ) : (
+                <DetailRow
+                  label="CBU"
+                  value={counterpartyCbu ?? "—"}
+                  mono={!!counterpartyCbu}
+                />
+              )}
               <DetailRow label="Descripción" value={description?.trim() || "—"} />
             </div>
           </motion.div>
