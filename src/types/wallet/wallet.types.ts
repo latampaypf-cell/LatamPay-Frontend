@@ -160,6 +160,8 @@ export type Transaction = {
   exchangeRate?: number;
   fromCurrency?: string;
   toCurrency?: string;
+  fromAmount?: number;
+  toAmount?: number;
 };
 
 export type TransferInput = {

@@ -77,5 +77,7 @@ export const mapTransaction = (t: ApiTransaction): Transaction => {
     exchangeRate,
     fromCurrency: t.from_currency ?? undefined,
     toCurrency: t.to_currency ?? undefined,
+    fromAmount: Number.isFinite(fromAmount) ? fromAmount : undefined,
+    toAmount: Number.isFinite(toAmount) ? toAmount : undefined,
   };
 };
