@@ -72,9 +72,19 @@ export const HomeHero = () => {
             >
               Crear Cuenta
             </Link>
-            <button className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-xl">
-              Ver Cotizaciones
-            </button>
+            <button
+  onClick={() => {
+    document
+      .getElementById("mercado-divisas")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  }}
+  className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-xl"
+>
+  Ver Cotizaciones
+</button>
           </div>
 
           {/* Cotizaciones en vivo (reutilizables) */}
