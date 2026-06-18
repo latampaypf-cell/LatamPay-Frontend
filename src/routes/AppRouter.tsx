@@ -19,6 +19,8 @@ import { PublicLayout } from "../layouts/PublicLayaout";
 import { ForgotPassword } from "../pages/ForgotPassword/ForgotPassword";
 import { VerifyCode } from "../pages/ForgotPassword/VerifyCode";
 import { ResetPassword } from "../pages/ForgotPassword/ResetPassword";
+import { TermsAndConditions } from "../pages/TermsAndConditions/TermsAndConditions";
+import { PrivacyPolicy } from "../pages/PrivacyPolicy/PrivacyPolicy";
 
 export function AppRouter() {
   return (
@@ -33,6 +35,16 @@ export function AppRouter() {
                   <Route path={paths.login} element={<Login />} />
                   <Route path={paths.register} element={<Register />} />
                   <Route path={paths.support} element={<Support />} />
+                  <Route
+                    path={paths.termsAndConditions}
+                    element={<TermsAndConditions />}
+                  />
+
+                  <Route
+                    path={paths.privacyPolicy}
+                    element={<PrivacyPolicy />}
+                  />
+
                   <Route
                     path={paths.forgotPassword}
                     element={<ForgotPassword />}

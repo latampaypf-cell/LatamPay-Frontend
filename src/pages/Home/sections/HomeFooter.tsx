@@ -9,8 +9,8 @@ export const HomeFooter = () => (
             LatamPay
           </h3>
           <p className="mt-4 text-sm text-slate-400 leading-relaxed">
-            Wallet multimoneda para gestionar, convertir y transferir dinero entre distintos
-            países de Latinoamérica de forma rápida y segura.
+            Wallet multimoneda para gestionar, convertir y transferir dinero
+            entre distintos países de Latinoamérica de forma rápida y segura.
           </p>
         </div>
 
@@ -18,12 +18,18 @@ export const HomeFooter = () => (
           <h4 className="mb-4 font-semibold text-white">Navegación</h4>
           <ul className="space-y-3 text-slate-400">
             <li>
-              <Link to="/login" className="hover:text-cyan-400 transition text-white">
+              <Link
+                to="/login"
+                className="hover:text-cyan-400 transition text-white"
+              >
                 Iniciar Sesión
               </Link>
             </li>
             <li>
-              <Link to="/register" className="hover:text-cyan-400 transition text-white">
+              <Link
+                to="/register"
+                className="hover:text-cyan-400 transition text-white"
+              >
                 Registrarse
               </Link>
             </li>
@@ -33,9 +39,23 @@ export const HomeFooter = () => (
         <div>
           <h4 className="mb-4 font-semibold text-white">Soporte</h4>
           <ul className="space-y-3 text-slate-400">
-            <li className="hover:text-cyan-400 transition cursor-pointer">Centro de Ayuda</li>
-            <li className="hover:text-cyan-400 transition cursor-pointer">Términos y Condiciones</li>
-            <li className="hover:text-cyan-400 transition cursor-pointer">Política de Privacidad</li>
+            <li>
+              <Link
+                to="/terms-and-conditions"
+                className="cursor-pointer transition hover:text-cyan-400 text-white"
+              >
+                Términos y Condiciones
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/privacy-policy"
+                className="cursor-pointer transition hover:text-cyan-400 text-white"
+              >
+                Política de Privacidad
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -43,15 +63,32 @@ export const HomeFooter = () => (
           <h4 className="mb-4 font-semibold text-white">Contacto</h4>
           <p className="text-slate-400">soporte@latampay.com</p>
           <div className="mt-5 flex gap-3">
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400">X</a>
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400">IG</a>
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400">IN</a>
+            <a
+              href="#"
+              className="text-white flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400"
+            >
+              X
+            </a>
+            <a
+              href="#"
+              className="text-white flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400"
+            >
+              IG
+            </a>
+            <a
+              href="#"
+              className="text-white flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-cyan-500/50 hover:text-cyan-400"
+            >
+              IN
+            </a>
           </div>
         </div>
       </div>
 
       <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-slate-500 md:flex-row">
-        <p>© {new Date().getFullYear()} LatamPay. Todos los derechos reservados.</p>
+        <p>
+          © {new Date().getFullYear()} LatamPay. Todos los derechos reservados.
+        </p>
       </div>
     </div>
   </footer>
