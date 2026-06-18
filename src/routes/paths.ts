@@ -1,12 +1,14 @@
 export const paths = {
- home: "/",
+  home: "/",
   login: "/login",
   register: "/register",
-
 
   forgotPassword: "/forgot-password",
   verifyCode: "/verify-code",
   resetPassword: "/reset-password",
+
+  termsAndConditions: "/terms-and-conditions",
+  privacyPolicy: "/privacy-policy",
 
   support: "/support",
   dashboard: "/dashboard",
