@@ -309,7 +309,7 @@ export const Dashboard = () => {
           className="mt-10"
         >
           <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-xl font-semibold">Cotizaciones en vivo</h2>
+            <h2 className="text-xl font-semibold">Cotizaciones</h2>
           </div>
           <LiveRatesGrid variant="detailed" />
         </motion.section>
